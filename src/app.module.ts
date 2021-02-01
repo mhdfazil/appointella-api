@@ -6,6 +6,10 @@ import { ServiceModule } from './service/service.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { PaymentModule } from './payment/payment.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserModule } from './user/user.module';
+import { MerchantModule } from './merchant/merchant.module';
+import { AdminModule } from './admin/admin.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -13,7 +17,11 @@ import { MulterModule } from '@nestjs/platform-express';
     AppointmentModule, 
     ServiceModule, 
     FeedbackModule, 
-    PaymentModule
+    PaymentModule, 
+    UserModule, 
+    MerchantModule, 
+    AdminModule, 
+    CustomerModule
   ],
   controllers: [AppController],
   providers: [AppService],

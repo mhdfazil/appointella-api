@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+import { Merchant } from "src/merchant/merchant.schema";
 
 export type ServiceDocument = Service & Document;
 
 @Schema({ timestamps: true })
 export class Service {
 
-    @Prop({ required:true })
+    @Prop({ required:true, type: Types.ObjectId, ref: Merchant.name })
     merchant: Types.ObjectId;
 
     @Prop({ required: true })
