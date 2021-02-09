@@ -17,15 +17,15 @@ export class ServiceService {
     return this.serviceModel.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return this.serviceModel.findOne({ _id: id });
   }
 
-  async update(id: number, service: Service) {
+  async update(id: string, service: Service) {
     return await this.serviceModel.findByIdAndUpdate(id, service, { new: true });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.serviceModel.findByIdAndRemove(id);
   }
 }

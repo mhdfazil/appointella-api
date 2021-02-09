@@ -17,16 +17,16 @@ export class ServiceController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.serviceService.findOne(+id);
+    return this.serviceService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() serviceDto: ServiceDto) {
-    return this.serviceService.update(+id, serviceDto);
+    return this.serviceService.update(id, serviceDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.serviceService.remove(+id);
+    return this.serviceService.remove(id);
   }
 }

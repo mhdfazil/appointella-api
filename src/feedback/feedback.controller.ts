@@ -18,16 +18,16 @@ export class FeedbackController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.feedbackService.findOne(+id);
+    return this.feedbackService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() feedbackDto: FeedbackDto) {
-    return this.feedbackService.update(+id, feedbackDto);
+  update(@Param('id') id: string, @Body() feedbackDto: any) {
+    return this.feedbackService.update(id, feedbackDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.feedbackService.remove(+id);
+    return this.feedbackService.remove(id);
   }
 }
