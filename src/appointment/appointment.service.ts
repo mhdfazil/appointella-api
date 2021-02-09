@@ -18,15 +18,15 @@ export class AppoitmentService {
     return this.appointmentModel.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return this.appointmentModel.findOne({ _id: id });
   }
 
-  async update(id: number, appoitmentDto: AppointmentDto) {
+  async update(id: string, appoitmentDto: AppointmentDto) {
     return await this.appointmentModel.findByIdAndUpdate(id, appoitmentDto, { new: true });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.appointmentModel.findByIdAndRemove(id);
   }
 

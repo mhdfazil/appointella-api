@@ -17,15 +17,15 @@ export class PaymentService {
     return this.paymentModel.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return this.paymentModel.findOne({ _id: id });
   }
 
-  async update(id: number, Payment: Payment) {
+  async update(id: string, Payment: Payment) {
     return await this.paymentModel.findByIdAndUpdate(id, Payment, { new: true });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.paymentModel.findByIdAndRemove(id);
   }
 }

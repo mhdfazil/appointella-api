@@ -17,15 +17,15 @@ export class FeedbackService {
     return this.FeedbackModel.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return this.FeedbackModel.findOne({ _id: id });
   }
 
-  async update(id: number, feedback: Feedback) {
+  async update(id: string, feedback: Feedback) {
     return await this.FeedbackModel.findByIdAndUpdate(id, feedback, { new: true });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.FeedbackModel.findByIdAndRemove(id);
   }
 }

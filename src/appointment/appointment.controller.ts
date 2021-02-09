@@ -18,16 +18,16 @@ export class AppoitmentController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.appoitmentService.findOne(+id);
+    return this.appoitmentService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() appoitmentDto: AppointmentDto) {
-    return this.appoitmentService.update(+id, appoitmentDto);
+    return this.appoitmentService.update(id, appoitmentDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.appoitmentService.remove(+id);
+    return this.appoitmentService.remove(id);
   }
 }
