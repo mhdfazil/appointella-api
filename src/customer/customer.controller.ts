@@ -18,16 +18,16 @@ export class CustomerController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.customerService.findOne(+id);
+    return this.customerService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateCustomerDto: CustomerDto) {
-    return this.customerService.update(+id, updateCustomerDto);
+    return this.customerService.update(id, updateCustomerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.customerService.remove(+id);
+    return this.customerService.remove(id);
   }
 }

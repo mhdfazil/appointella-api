@@ -18,16 +18,16 @@ export class MerchantController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.merchantService.findOne(+id);
+    return this.merchantService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateMerchantDto: MerchantDto) {
-    return this.merchantService.update(+id, updateMerchantDto);
+    return this.merchantService.update(id, updateMerchantDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.merchantService.remove(+id);
+    return this.merchantService.remove(id);
   }
 }
