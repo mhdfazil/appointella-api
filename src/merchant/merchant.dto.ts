@@ -1,4 +1,4 @@
-export class MerchatDto{
+export class MerchantDto{
     readonly user_id:string;
     readonly name:string;
     readonly longitude:string;
