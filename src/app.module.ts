@@ -10,9 +10,12 @@ import { UserModule } from './user/user.module';
 import { MerchantModule } from './merchant/merchant.module';
 import { AdminModule } from './admin/admin.module';
 import { CustomerModule } from './customer/customer.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import config from './config/key';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(config.mongoURI, {useNewUrlParser: true}),
     MulterModule.register({ dest: './uploads' }),
     AppointmentModule, 
     ServiceModule, 

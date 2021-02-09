@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { FeedbackDto } from './feedback.dto';
 
 @Injectable()
 export class FeedbackService {
-  create(createFeedbackDto: CreateFeedbackDto) {
+  create(createFeedbackDto: FeedbackDto) {
     return 'This action adds a new feedback';
   }
 
@@ -16,7 +15,7 @@ export class FeedbackService {
     return `This action returns a #${id} feedback`;
   }
 
-  update(id: number, updateFeedbackDto: UpdateFeedbackDto) {
+  update(id: number, updateFeedbackDto: FeedbackDto) {
     return `This action updates a #${id} feedback`;
   }
 
