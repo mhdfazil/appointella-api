@@ -7,8 +7,8 @@ export class AppoitmentController {
   constructor(private readonly appoitmentService: AppoitmentService) {}
 
   @Post()
-  create(@Body() createAppoitmentDto: AppointmentDto) {
-    return this.appoitmentService.create(createAppoitmentDto);
+  create(@Body() appoitmentDto: AppointmentDto) {
+    return this.appoitmentService.create(appoitmentDto);
   }
 
   @Get()
@@ -22,8 +22,8 @@ export class AppoitmentController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAppoitmentDto: AppointmentDto) {
-    return this.appoitmentService.update(+id, updateAppoitmentDto);
+  update(@Param('id') id: string, @Body() appoitmentDto: AppointmentDto) {
+    return this.appoitmentService.update(+id, appoitmentDto);
   }
 
   @Delete(':id')

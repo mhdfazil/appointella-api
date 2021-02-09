@@ -1,25 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { FeedbackDto } from './feedback.dto';
+import { Feedback, FeedbackDocument } from './feedback.schema';
 
 @Injectable()
 export class FeedbackService {
-  create(createFeedbackDto: FeedbackDto) {
-    return 'This action adds a new feedback';
+  constructor( @InjectModel(Feedback.name) private readonly FeedbackModel: Model<FeedbackDocument> ) {}
+
+  async create(feedbackDto: FeedbackDto) {
+    const feedback = new this.FeedbackModel(feedbackDto);
+    return await feedback.save();
   }
 
-  findAll() {
-    return `This action returns all feedback`;
+  async findAll() {
+    return this.FeedbackModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} feedback`;
+  async findOne(id: number) {
+    return this.FeedbackModel.findOne({ _id: id });
   }
 
-  update(id: number, updateFeedbackDto: FeedbackDto) {
-    return `This action updates a #${id} feedback`;
+  async update(id: number, feedback: Feedback) {
+    return await this.FeedbackModel.findByIdAndUpdate(id, feedback, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} feedback`;
+  async remove(id: number) {
+    return await this.FeedbackModel.findByIdAndRemove(id);
   }
 }
