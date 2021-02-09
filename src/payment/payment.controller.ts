@@ -4,11 +4,12 @@ import { PaymentService } from './payment.service';
 
 @Controller('payment')
 export class PaymentController {
+
   constructor(private readonly paymentService: PaymentService) {}
 
   @Post()
-  create(@Body() createPaymentDto: PaymentDto) {
-    return this.paymentService.create(createPaymentDto);
+  create(@Body() paymentDto: PaymentDto) {
+    return this.paymentService.create(paymentDto);
   }
 
   @Get()
@@ -22,8 +23,8 @@ export class PaymentController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatePaymentDto: PaymentDto) {
-    return this.paymentService.update(+id, updatePaymentDto);
+  update(@Param('id') id: string, @Body() paymentDto: PaymentDto) {
+    return this.paymentService.update(+id, paymentDto);
   }
 
   @Delete(':id')

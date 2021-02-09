@@ -7,8 +7,8 @@ export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
   @Post()
-  create(@Body() createFeedbackDto: FeedbackDto) {
-    return this.feedbackService.create(createFeedbackDto);
+  create(@Body() feedbackDto: FeedbackDto) {
+    return this.feedbackService.create(feedbackDto);
   }
 
   @Get()
@@ -22,8 +22,8 @@ export class FeedbackController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateFeedbackDto: FeedbackDto) {
-    return this.feedbackService.update(+id, updateFeedbackDto);
+  update(@Param('id') id: string, @Body() feedbackDto: FeedbackDto) {
+    return this.feedbackService.update(+id, feedbackDto);
   }
 
   @Delete(':id')

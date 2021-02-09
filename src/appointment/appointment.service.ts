@@ -1,25 +1,33 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { AppointmentDto } from './appointment.dto';
+import { Appointment, AppointmentDocument } from './appointment.schema';
 
 @Injectable()
 export class AppoitmentService {
-  create(createAppoitmentDto: AppointmentDto) {
-    return 'This action adds a new appoitment';
+
+  constructor( @InjectModel(Appointment.name) private readonly appointmentModel: Model<AppointmentDocument> ) {}
+
+  async create(createAppoitmentDto: AppointmentDto) {
+    const appointment = new this.appointmentModel(createAppoitmentDto);
+    return await appointment.save();
   }
 
-  findAll() {
-    return `This action returns all appoitment`;
+  async findAll() {
+    return this.appointmentModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} appoitment`;
+  async findOne(id: number) {
+    return this.appointmentModel.findOne({ _id: id });
   }
 
-  update(id: number, updateAppoitmentDto: AppointmentDto) {
-    return `This action updates a #${id} appoitment`;
+  async update(id: number, appoitmentDto: AppointmentDto) {
+    return await this.appointmentModel.findByIdAndUpdate(id, appoitmentDto, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} appoitment`;
+  async remove(id: number) {
+    return await this.appointmentModel.findByIdAndRemove(id);
   }
+
 }
