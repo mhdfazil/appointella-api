@@ -5,7 +5,7 @@ import { MerchantService } from './merchant.service';
 import { MerchantController } from './merchant.controller';
 
 @Module({
-  imports:[MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema}])],
+  imports: [MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema }])],
   controllers: [MerchantController],
   providers: [MerchantService]
 })
