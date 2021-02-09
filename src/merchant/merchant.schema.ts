@@ -7,7 +7,7 @@ export  type MerchantDocument = Merchant & Document;
 export class Merchant {
 
     @Prop({required:true})
-    user_id:string;
+    userId:string;
 
     @Prop({required:true})
     name:string;
@@ -19,10 +19,10 @@ export class Merchant {
     latitude:string
 
     @Prop({required:true})
-    open_time:string
+    openTime:string
 
     @Prop({required:true})
-    close_time:string
+    closeTime:string
 
 }
 

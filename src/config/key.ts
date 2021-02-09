@@ -1,3 +1,3 @@
 export default {
-    mongoURI: 'mongodb+srv://admin:warrior@00@cluster0.6js9h.mongodb.net/<appointella?retryWrites=true&w=majority',
+    mongoURI: 'mongodb+srv://admin:Sgti9300@cluster0.m7rnq.mongodb.net/appointella?retryWrites=true&w=majority',
 }

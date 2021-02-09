@@ -7,7 +7,7 @@ export type UserDocument = User & Document;
 export class User {
 
     @Prop({ required: true, unique: true })
-    user_name: string;
+    username: string;
 
     @Prop({ required: true, minlength: 6 })
     password: string;
@@ -16,15 +16,15 @@ export class User {
     email: string;
 
     @Prop({ required: true})
-    mobile_no: string;
-
-    @Prop({ required: true})
-    address_line1: string;
+    mobileNo: string;
 
     @Prop()
-    address_line2: string;
+    addressLine1: string;
 
-    @Prop({ required: true})
+    @Prop()
+    addressLine2: string;
+
+    @Prop({ required: true, enum: ['admin', 'customer', 'merchant'] })
     type: string;
 
     @Prop()

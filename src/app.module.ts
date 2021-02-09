@@ -11,6 +11,7 @@ import { MerchantModule } from './merchant/merchant.module';
 import { AdminModule } from './admin/admin.module';
 import { CustomerModule } from './customer/customer.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 import config from './config/key';
 
 @Module({
@@ -24,7 +25,7 @@ import config from './config/key';
     UserModule, 
     MerchantModule, 
     AdminModule, 
-    CustomerModule
+    CustomerModule, AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

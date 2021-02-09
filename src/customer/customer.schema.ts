@@ -7,13 +7,13 @@ export  type CustomerDocument = Customer & Document;
 export class Customer {
 
     @Prop({required:true})
-    user_id:string;
+    userId:string;
 
     @Prop({required:true})
-    first_name:string;
+    firstName:string;
 
     @Prop({required:true})
-    last_name:string;
+    lastName:string;
 
 
 }
