@@ -35,5 +35,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 #keys
-src/config/keys.ts
+src/config/key.ts
 src/auth/constants.ts
