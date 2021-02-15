@@ -20,23 +20,23 @@ export class UserService {
     return await newuser.save();
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll():Promise<User[]> {
+    return this.userModel.find().exec();
   }
 
   async findOne(username: string) {
-    return await this.userModel.findOne({ username: username }, 'user_name type deleted');
+    return await this.userModel.findOne({ username: username }, 'username type deleted');
   }
 
   async findOneForLogin(username: string) {
-    return await this.userModel.findOne({ username: username, deleted: false }, 'user_name password type deleted');
+    return await this.userModel.findOne({ username: username, deleted: false }, 'username password type deleted');
   }
 
-  update(id: number, updateUserDto: UserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UserDto) {
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto, {new:true});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    return this.userModel.findByIdAndRemove(id);
   }
 }
