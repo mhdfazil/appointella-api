@@ -12,11 +12,17 @@ import { AdminModule } from './admin/admin.module';
 import { CustomerModule } from './customer/customer.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
-import config from './config/key';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(config.mongoURI, {useNewUrlParser: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     MulterModule.register({ dest: './uploads' }),
     AppointmentModule, 
     ServiceModule, 
@@ -25,7 +31,8 @@ import config from './config/key';
     UserModule, 
     MerchantModule, 
     AdminModule, 
-    CustomerModule, AuthModule
+    CustomerModule, 
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
-import { Role } from './auth/constants';
+import { Role } from './config/role';
 import { Public } from './auth/decorators/public.decorator';
 import { Roles } from './auth/decorators/roles.decorator';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';

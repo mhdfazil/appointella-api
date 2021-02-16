@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/constants';
+import { Role } from 'src/config/role';
 
 @Controller('merchant')
 export class MerchantController {

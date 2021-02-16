@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
-import { Role } from 'src/auth/constants';
+import { Role } from 'src/config/role';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CustomerDto } from './customer.dto';
 import { CustomerService } from './customer.service';

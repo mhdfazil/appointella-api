@@ -2,18 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from './user.dto';
-import { User, UserDocument } from './user.schema';
-import { saltOrRounds } from 'src/auth/constants';
+import { User, UserDocument } from './user.schema';;
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private configService: ConfigService
   ) {}
 
   async create(user: User): Promise<User> {
-    const hash = await bcrypt.hash(user.password, saltOrRounds);
+    const hash = await bcrypt.hash(user.password, this.configService.get<string>('SALT_ROUND'));
     user.password = hash;
 
     const newuser = new this.userModel(user);
