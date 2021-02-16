@@ -19,7 +19,7 @@ export class MerchantService {
   }
 
   async findOne(id: string): Promise<Merchant> {
-    return await this.merchantModel.findById(id);
+    return await this.merchantModel.findOne({ userId: id }).exec();
   }
 
   async update(id: string, updateMerchantDto: MerchantDto) {

@@ -18,7 +18,7 @@ export class CustomerService {
   }
 
   async findOne(id: string) {
-    return await this.customerModel.findById(id);
+    return await this.customerModel.find({userId:id}).exec();
   }
 
   async update(id: string, updateCustomerDto: CustomerDto) {

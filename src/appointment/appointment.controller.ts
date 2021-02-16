@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { AppointmentDto } from './appointment.dto';
 import { AppoitmentService } from './appointment.service';
 
-@Controller('appoitment')
+@Controller('appointment')
 export class AppoitmentController {
   constructor(private readonly appoitmentService: AppoitmentService) {}
 

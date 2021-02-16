@@ -14,6 +14,12 @@ export class Appointment {
     @Prop({ required: true, type: Types.ObjectId, ref: Service.name })
     service: Types.ObjectId;
 
+    @Prop({required:true})
+    startTime: string;
+
+    @Prop({required:true})
+    endTime: string;
+
     @Prop({ required: true })
     subService: number;
 
