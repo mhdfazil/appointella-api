@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Role } from 'src/auth/constants';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CustomerDto } from './customer.dto';
 import { CustomerService } from './customer.service';
 
@@ -6,6 +8,7 @@ import { CustomerService } from './customer.service';
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
+  @Roles(Role.Customer, Role.Admin)
   @Post()
   create(@Body() createCustomerDto: CustomerDto) {
     return this.customerService.create(createCustomerDto);
@@ -21,6 +24,7 @@ export class CustomerController {
     return this.customerService.findOne(id);
   }
 
+  @Roles(Role.Customer, Role.Admin)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateCustomerDto: CustomerDto) {
     return this.customerService.update(id, updateCustomerDto);
