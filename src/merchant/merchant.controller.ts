@@ -3,6 +3,7 @@ import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
+import { Merchant } from './merchant.schema';
 
 @Controller('merchant')
 export class MerchantController {
@@ -22,6 +23,11 @@ export class MerchantController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.merchantService.findOne(id);
+  }
+
+  @Get('name/:name')
+  findByName(@Param('name') name: string) : Promise<Merchant[]> {
+    return this.merchantService.findByName(name);
   }
 
   @Roles(Role.Merchant, Role.Admin)

@@ -31,6 +31,9 @@ export class User {
     image: string;
 
     @Prop({ default: false })
+    verified?: boolean;
+
+    @Prop({ default: false })
     deleted: boolean;
 
 }

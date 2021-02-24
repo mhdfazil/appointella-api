@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CustomerDto } from './customer.dto';
@@ -18,7 +18,15 @@ export class CustomerService {
   }
 
   async findOne(id: string) {
-    return await this.customerModel.find({userId:id}).exec();
+    return await this.customerModel.findById(id);
+  }
+
+  async findByName(firstName: string): Promise<Customer[]> {
+    const customer =  await this.customerModel.find({ firstName }).exec();
+    if(customer.length < 1)
+      throw new NotFoundException("Customers not found");
+    
+    return customer;  
   }
 
   async update(id: string, updateCustomerDto: CustomerDto) {
