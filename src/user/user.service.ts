@@ -14,7 +14,7 @@ export class UserService {
   ) {}
 
   async create(user: User): Promise<User> {
-    const hash = await bcrypt.hash(user.password, this.configService.get<string>('SALT_ROUND'));
+    const hash = await bcrypt.hash(user.password, parseInt(this.configService.get<string>('SALT_ROUND')));
     user.password = hash;
 
     const newuser = new this.userModel(user);
@@ -26,11 +26,11 @@ export class UserService {
   }
 
   async findOne(username: string) {
-    return await this.userModel.findOne({ username: username }, 'username type deleted');
+    return await this.userModel.findOne({ username }, 'username type deleted');
   }
 
   async findOneForLogin(username: string) {
-    return await this.userModel.findOne({ username: username, deleted: false }, 'username password type deleted');
+    return await this.userModel.findOne({ username, deleted: false }, 'username password type deleted');
   }
 
   async update(id: string, updateUserDto: UserDto) {
@@ -39,6 +39,14 @@ export class UserService {
 
   remove(id: string) {
     return this.userModel.findByIdAndRemove(id);
+  }
+
+  async isVerified(email: string) {
+    return await this.userModel.findOne({ email }, 'id verified');
+  }
+
+  verifyEmail(id: string) {
+    this.userModel.findByIdAndUpdate(id, { verified: true });
   }
 
 }

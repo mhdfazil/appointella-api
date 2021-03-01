@@ -24,7 +24,11 @@ export class MerchantService {
   }
 
   async findOne(id: string): Promise<Merchant> {
-    return await this.merchantModel.findById(id).populate('user');
+    return await this.merchantModel.findById(id).populate('user').populate('service');
+  }
+
+  async findByName(name: string): Promise<Merchant[]> {
+    return await this.merchantModel.find({ name }).exec();
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto) {
