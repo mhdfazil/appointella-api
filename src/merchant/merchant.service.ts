@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MerchantDto } from './merchant.dto';
+import { MerchantUpdateDto } from './merchant-update.dto';
 import { Merchant, MerchantDocument } from './merchant.schema';
+import { UserService } from '../user/user.service'
 
 @Injectable()
 export class MerchantService {
 
-  constructor(@InjectModel(Merchant.name) private readonly merchantModel: Model<MerchantDocument>) {}
+  constructor(
+    @InjectModel(Merchant.name) private readonly merchantModel: Model<MerchantDocument>,
+    private userService: UserService
+  ) {}
 
   async create(createMerchantDto: MerchantDto):  Promise<Merchant> {
     const newMerchant = new this.merchantModel(createMerchantDto);
@@ -19,12 +24,14 @@ export class MerchantService {
   }
 
   async findOne(id: string): Promise<Merchant> {
-    return await this.merchantModel.findOne({ userId: id }).exec();
+    return await this.merchantModel.findById(id).populate('user');
   }
 
-  async update(id: string, updateMerchantDto: MerchantDto) {
-    const updateMerchant = new this.merchantModel(updateMerchantDto);
-    return await this.merchantModel.findByIdAndUpdate(id, updateMerchant, {new:true});
+  async update(id: string, merchantUpdateDto: MerchantUpdateDto) {
+    const merchantUpdate = new this.merchantModel(merchantUpdateDto);
+    this.merchantModel.findByIdAndUpdate(id, merchantUpdate, {new:true});
+    return await this.userService.update(merchantUpdateDto.user, merchantUpdateDto);
+    
   }
 
   async remove(id: string) {

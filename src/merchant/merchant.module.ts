@@ -3,9 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Merchant, MerchantSchema } from './merchant.schema'
 import { MerchantService } from './merchant.service';
 import { MerchantController } from './merchant.controller';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema }]),
+    UserModule
+  ],
   controllers: [MerchantController],
   providers: [MerchantService]
 })

@@ -13,6 +13,7 @@ import { CustomerModule } from './customer/customer.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MerchantModule, 
     AdminModule, 
     CustomerModule, 
-    AuthModule
+    AuthModule, ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],

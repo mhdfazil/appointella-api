@@ -1,5 +1,5 @@
 export class MerchantDto{
-    readonly userId:string;
+    readonly user:string;
     readonly name:string;
     readonly longitude:string;
     readonly latitude:string;

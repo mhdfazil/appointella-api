@@ -1,5 +1,5 @@
 export class AdminDto{
-    readonly userId:string;
+    readonly user:string;
     readonly firstName:string;
     readonly lastName:string;
 }

@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
+import { MerchantUpdateDto } from './merchant-update.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
 
@@ -26,8 +27,8 @@ export class MerchantController {
 
   @Roles(Role.Merchant, Role.Admin)
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateMerchantDto: MerchantDto) {
-    return this.merchantService.update(id, updateMerchantDto);
+  update(@Param('id') id: string, @Body() merchantUpdateDto: MerchantUpdateDto) {
+    return this.merchantService.update(id, merchantUpdateDto);
   }
 
   @Roles(Role.Merchant, Role.Admin)

@@ -1,13 +1,14 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
+import { User } from "src/user/user.schema";
 
 export  type MerchantDocument = Merchant & Document;
 
 @Schema({timestamps:true})
 export class Merchant {
 
-    @Prop({required:true})
-    userId:string;
+    @Prop({required:true, type:Types.ObjectId, ref: User.name})
+    userId: Types.ObjectId;
 
     @Prop({required:true})
     name:string;

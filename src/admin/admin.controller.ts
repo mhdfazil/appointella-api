@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { Role } from 'src/config/role';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AdminDto } from './admin.dto';
+import { AdminUpdateDto } from './admin-update.dto';
 import { Admin } from './admin.schema';
 import { AdminService } from './admin.service';
 
@@ -27,8 +28,8 @@ export class AdminController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: AdminDto) {
-    return this.adminService.update(id, updateAdminDto);
+  update(@Param('id') id: string, @Body() adminUpdateDto: AdminUpdateDto) {
+    return this.adminService.update(id, adminUpdateDto);
   }
 
   @Delete(':id')
