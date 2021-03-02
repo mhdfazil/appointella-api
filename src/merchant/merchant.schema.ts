@@ -8,7 +8,7 @@ export  type MerchantDocument = Merchant & Document;
 export class Merchant {
 
     @Prop({required:true, type:Types.ObjectId, ref: User.name})
-    userId: Types.ObjectId;
+    user: Types.ObjectId;
 
     @Prop({required:true})
     name:string;

@@ -14,7 +14,6 @@ import { MerchantModule } from './merchant/merchant.module';
 import { PaymentModule } from './payment/payment.module';
 import { ServiceModule } from './service/service.module';
 import { UserModule } from './user/user.module';
-import { ProductModule } from './product/product.module';
 import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailModule } from './email/email.module';
@@ -61,13 +60,9 @@ import { EmailModule } from './email/email.module';
     MerchantModule, 
     AdminModule, 
     CustomerModule, 
-<<<<<<< HEAD
-    AuthModule, ProductModule
-=======
     AuthModule, 
     VerifyEmailModule,
     EmailModule
->>>>>>> 8bdffce80dc2d2cd1ee68ab288b8cd860546783a
   ],
   controllers: [AppController],
   providers: [AppService],
