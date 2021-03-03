@@ -28,7 +28,7 @@ export class MerchantService {
   }
 
   async findByName(name: string): Promise<Merchant[]> {
-    return await this.merchantModel.find({ name }).exec();
+    return await this.merchantModel.find({name: new RegExp(name, "i")}).exec();
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto) {

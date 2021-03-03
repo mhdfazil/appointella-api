@@ -21,6 +21,16 @@ export class AppoitmentController {
     return this.appoitmentService.findOne(id);
   }
 
+  @Get('customer/:id')
+  findByCustomer(@Param('id') id: string) {
+    return this.appoitmentService.findByCustomer(id);
+  }
+
+  @Get('customer/:id/:date')
+  findByCustomerDate(@Param('id') id: string, @Param('date') date: string) {
+    return this.appoitmentService.findByCustomerDate(id, date);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() appoitmentDto: AppointmentDto) {
     return this.appoitmentService.update(id, appoitmentDto);

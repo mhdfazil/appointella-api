@@ -22,6 +22,14 @@ export class AppoitmentService {
     return this.appointmentModel.findOne({ _id: id });
   }
 
+  async findByCustomer(id: string) {
+    return this.appointmentModel.find({ customer: id }).exec();
+  }
+
+  async findByCustomerDate(id: string, date: string) {
+    return this.appointmentModel.find({ customer: id, date: date }).exec();
+  }
+
   async update(id: string, appoitmentDto: AppointmentDto) {
     return await this.appointmentModel.findByIdAndUpdate(id, appoitmentDto, { new: true });
   }
