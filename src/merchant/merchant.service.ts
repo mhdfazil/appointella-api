@@ -5,6 +5,7 @@ import { MerchantDto } from './merchant.dto';
 import { MerchantUpdateDto } from './merchant-update.dto';
 import { Merchant, MerchantDocument } from './merchant.schema';
 import { UserService } from '../user/user.service'
+const querystring = require('querystring');
 
 @Injectable()
 export class MerchantService {
@@ -19,16 +20,16 @@ export class MerchantService {
     return await newMerchant.save();
   }
 
-  async findAll(): Promise<Merchant[]> {
-    return await this.merchantModel.find().exec();
+  async findAll(filter: string): Promise<Merchant[]> {
+    console.log('filter-----------------', JSON.parse(JSON.stringify(filter)));
+    const value = Object.values(JSON.parse(filter)).toString()
+    const key = Object.keys(JSON.parse(filter))[0]
+    
+    return await this.merchantModel.find().where(key, new RegExp(value, "i")).populate('user').populate('service').exec();
   }
 
   async findOne(id: string): Promise<Merchant> {
     return await this.merchantModel.findById(id).populate('user').populate('service');
-  }
-
-  async findByName(name: string): Promise<Merchant[]> {
-    return await this.merchantModel.find({name: new RegExp(name, "i")}).exec();
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto) {

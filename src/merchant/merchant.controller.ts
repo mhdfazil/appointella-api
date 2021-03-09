@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
 import { MerchantUpdateDto } from './merchant-update.dto';
@@ -17,18 +17,13 @@ export class MerchantController {
   }
 
   @Get()
-  findAll() {
-    return this.merchantService.findAll();
+  findAll(@Query('filter') filter: string) {
+    return this.merchantService.findAll(filter);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.merchantService.findOne(id);
-  }
-
-  @Get('name/:name')
-  findByName(@Param('name') name: string) : Promise<Merchant[]> {
-    return this.merchantService.findByName(name);
   }
 
   @Roles(Role.Merchant, Role.Admin)
