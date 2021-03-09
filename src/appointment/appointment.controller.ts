@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { AppointmentDto } from './appointment.dto';
 import { AppoitmentService } from './appointment.service';
 
@@ -26,8 +26,8 @@ export class AppoitmentController {
     return this.appoitmentService.findByCustomer(id);
   }
 
-  @Get('customer/:id/:date')
-  findByCustomerDate(@Param('id') id: string, @Param('date') date: string) {
+  @Get('customer/:id')
+  findByCustomerDate(@Param('id') id: string, @Query('date') date: Date) {
     return this.appoitmentService.findByCustomerDate(id, date);
   }
 

@@ -26,7 +26,7 @@ export class AppoitmentService {
     return this.appointmentModel.find({ customer: id }).exec();
   }
 
-  async findByCustomerDate(id: string, date: string) {
+  async findByCustomerDate(id: string, date: Date) {
     return this.appointmentModel.find({ customer: id, date: date }).exec();
   }
 
