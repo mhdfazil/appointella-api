@@ -21,8 +21,18 @@ export class UserService {
     return await newuser.save();
   }
 
-  async findAll():Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(filter: string):Promise<User[]> {
+    if (filter) {
+      const value = Object.values(JSON.parse(filter)).toString();
+      const key = Object.keys(JSON.parse(filter))[0];
+
+      return await this.userModel
+        .find()
+        .where(key, new RegExp(value, 'i'))
+        .populate('merchant')
+        .exec();
+    }
+    return await this.userModel.find().populate('merchant').exec();
   }
 
   async findOne(username: string) {

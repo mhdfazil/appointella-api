@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
@@ -22,8 +22,8 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query('filter') filter:string) {
+    return this.userService.findAll(filter);
   }
 
   @Get(':id')

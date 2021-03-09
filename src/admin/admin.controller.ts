@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { Role } from 'src/config/role';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AdminDto } from './admin.dto';
@@ -18,8 +18,8 @@ export class AdminController {
   }
 
   @Get()
-  findAll() {
-    return this.adminService.findAll();
+  findAll(@Query('filter') filter: string) {
+    return this.adminService.findAll(filter);
   }
 
   @Get(':id')
