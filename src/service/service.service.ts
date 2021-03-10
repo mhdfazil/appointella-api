@@ -30,6 +30,10 @@ export class ServiceService {
     return await this.serviceModel.find().populate('merchant').exec();
   }
 
+  async findByMerchantId(id: string) {
+    return this.serviceModel.find({ merchant: id }).exec();
+  }
+
   async findOne(id: string) {
     return this.serviceModel.findOne({ _id: id });
   }
