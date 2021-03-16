@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from './user.dto';
@@ -18,7 +18,13 @@ export class UserService {
     user.password = hash;
 
     const newuser = new this.userModel(user);
-    return await newuser.save();
+
+    try {
+      return await newuser.save();
+    }
+    catch(err) {
+      throw new BadRequestException('Email already exist');
+    }
   }
 
   async findAll(filter: string):Promise<User[]> {
@@ -35,12 +41,12 @@ export class UserService {
     return await this.userModel.find().populate('merchant').exec();
   }
 
-  async findOne(username: string) {
-    return await this.userModel.findOne({ username }, 'username type deleted');
+  async findOne(email: string) {
+    return await this.userModel.findOne({ email }, 'email type deleted');
   }
 
   async findOneForLogin(email: string, type: string) {
-    return await this.userModel.findOne({ email, deleted: false, type }, 'username password type deleted');
+    return await this.userModel.findOne({ email, deleted: false, type }, 'email password type deleted');
   }
 
   async update(id: string, updateUserDto: UserDto) {
