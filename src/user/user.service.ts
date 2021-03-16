@@ -29,8 +29,8 @@ export class UserService {
     return await this.userModel.findOne({ username }, 'username type deleted');
   }
 
-  async findOneForLogin(username: string) {
-    return await this.userModel.findOne({ username, deleted: false }, 'username password type deleted');
+  async findOneForLogin(email: string, type: string) {
+    return await this.userModel.findOne({ email, deleted: false, type }, 'username password type deleted');
   }
 
   async update(id: string, updateUserDto: UserDto) {
