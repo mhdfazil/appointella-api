@@ -18,8 +18,18 @@ export class CustomerService {
     return await newCustomer.save();
   }
 
-  async findAll(): Promise<Customer[]> {
-    return await this.customerModel.find().exec();
+  async findAll(filter: string): Promise<Customer[]> {
+    if (filter) {
+      const value = Object.values(JSON.parse(filter)).toString();
+      const key = Object.keys(JSON.parse(filter))[0];
+
+      return await this.customerModel
+        .find()
+        .where(key, new RegExp(value, 'i'))
+        .populate('user')
+        .exec();
+    }
+    return await this.customerModel.find().populate('user').exec();
   }
 
   async findOne(id: string) {

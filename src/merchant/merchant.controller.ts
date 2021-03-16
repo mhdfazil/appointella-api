@@ -20,6 +20,10 @@ export class MerchantController {
   findAll(@Query('filter') filter: string) {
     return this.merchantService.findAll(filter);
   }
+  @Get('/service')
+  findServices(@Query('filter') filter: string) {
+    return this.merchantService.findServices(filter);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

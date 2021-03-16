@@ -17,18 +17,13 @@ export class CustomerController {
   }
 
   @Get()
-  findAll() {
-    return this.customerService.findAll();
+  findAll(@Query('filter') filter:string) {
+    return this.customerService.findAll(filter);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.customerService.findOne(id);
-  }
-
-  @Get('name/:name')
-  findByName(@Param('name') name: string) : Promise<Customer[]> {
-    return this.customerService.findByName(name);
   }
 
   @Roles(Role.Customer, Role.Admin)
