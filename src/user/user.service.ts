@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { CustomerService } from 'src/customer/customer.service';
-import { EmailService } from 'src/email/email.service';
+import { VerifyEmailService } from 'src/verify-email/verify-email.service';
 import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
 ;
@@ -16,7 +16,7 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private customerService: CustomerService,
     private configService: ConfigService,
-    private emailService: EmailService
+    private verifyEmailService: VerifyEmailService
   ) {}
 
   async create(user: User): Promise<any> {
@@ -27,9 +27,15 @@ export class UserService {
 
     try {
       const savedUser = await newuser.save();
+
+      // save customer
       if(user.type === 'customer') {
         this.customerService.create({ user: savedUser._id })
       }
+
+      // send email verification
+      this.verifyEmailService.create({ email: savedUser.email });
+      
       return {
         id: savedUser.id,
         email: savedUser.email,
@@ -74,7 +80,10 @@ export class UserService {
   }
 
   async isVerified(email: string) {
-    return await this.userModel.findOne({ email }, 'id verified');
+    const user = await this.userModel.findOne({ email }, 'id verified');
+    console.log({user});
+    
+    return user;
   }
 
   verifyEmail(id: string) {

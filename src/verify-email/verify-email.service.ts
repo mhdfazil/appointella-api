@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EmailService } from 'src/email/email.service';
@@ -7,23 +8,31 @@ import { VerifyEmailDto } from './verify-email.dto';
 import { VerifyEmail, VerifyEmailDocument } from './verify-email.schema';
 
 @Injectable()
-export class VerifyEmailService {
+export class VerifyEmailService implements OnModuleInit {
+
+  private userService: UserService
 
   constructor(
     @InjectModel(VerifyEmail.name) private readonly verifyEmailModel: Model<VerifyEmailDocument>,
-    private userService: UserService,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private moduleRef: ModuleRef
   ) {}
+
+  onModuleInit() {
+    this.userService = this.moduleRef.get(UserService, { strict: false });
+  }
 
   async create(verifyEmailDto: VerifyEmailDto) {
     verifyEmailDto.code = this.generateCode();
     const newVerify = new this.verifyEmailModel(verifyEmailDto);
-    return await newVerify.save();
+    await newVerify.save();
+    return await this.emailService.verify(`http://localhost:3000/verify-email/${verifyEmailDto.email}/${verifyEmailDto.code}`, verifyEmailDto.email);
   }
 
   async verify(email: string, code: string) {
     try {
       const { id, verified } = await this.userService.isVerified(email);
+      
       if(verified) {
         // already verified
         return 'Email already verified';
@@ -37,8 +46,7 @@ export class VerifyEmailService {
         return 'Your verification is expired. Try again.';
       }
     }
-    catch {
-      //not registerd yet
+    catch(err) {
       return 'You are not registered yet. Please register with our platform';
     }
   }

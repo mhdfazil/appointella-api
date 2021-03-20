@@ -27,7 +27,7 @@ export class User {
     @Prop()
     image: string;
 
-    @Prop({ default: false })
+    @Prop({ default: false, required: true })
     verified?: boolean;
 
     @Prop({ default: false })
