@@ -1,4 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -15,7 +16,8 @@ export class VerifyEmailService implements OnModuleInit {
   constructor(
     @InjectModel(VerifyEmail.name) private readonly verifyEmailModel: Model<VerifyEmailDocument>,
     private emailService: EmailService,
-    private moduleRef: ModuleRef
+    private moduleRef: ModuleRef,
+    private configService: ConfigService
   ) {}
 
   onModuleInit() {
@@ -26,7 +28,9 @@ export class VerifyEmailService implements OnModuleInit {
     verifyEmailDto.code = this.generateCode();
     const newVerify = new this.verifyEmailModel(verifyEmailDto);
     await newVerify.save();
-    return await this.emailService.verify(`http://localhost:3000/verify-email/${verifyEmailDto.email}/${verifyEmailDto.code}`, verifyEmailDto.email);
+
+    const path = this.configService.get<string>('BASE_PATH') + `verify-email/${verifyEmailDto.email}/${verifyEmailDto.code}`
+    return await this.emailService.verify(path, verifyEmailDto.email);
   }
 
   async verify(email: string, code: string) {
