@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request } from '@nestjs/common';
 import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
 import { MerchantUpdateDto } from './merchant-update.dto';
@@ -20,6 +20,7 @@ export class MerchantController {
   findAll(@Query('filter') filter: string) {
     return this.merchantService.findAll(filter);
   }
+
   @Get('/service')
   findServices(@Query('filter') filter: string) {
     return this.merchantService.findServices(filter);

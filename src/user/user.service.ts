@@ -1,29 +1,44 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { UserDto } from './user.dto';
-import { User, UserDocument } from './user.schema';;
-import * as bcrypt from 'bcrypt';
+import { BadRequestException, forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ModuleRef } from '@nestjs/core';
+import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
+import { CustomerService } from 'src/customer/customer.service';
+import { UserDto } from './user.dto';
+import { User, UserDocument } from './user.schema';
+;
 
 @Injectable()
 export class UserService {
+
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    private configService: ConfigService
+    private customerService: CustomerService,
+    private configService: ConfigService,
   ) {}
 
-  async create(user: User): Promise<User> {
+  async create(user: User): Promise<any> {
     const hash = await bcrypt.hash(user.password, parseInt(this.configService.get<string>('SALT_ROUND')));
     user.password = hash;
 
     const newuser = new this.userModel(user);
 
     try {
-      return await newuser.save();
+      const savedUser = await newuser.save();
+      if(user.type === 'customer') {
+        this.customerService.create({ user: savedUser._id })
+      }
+      return {
+        id: savedUser.id,
+        email: savedUser.email,
+        mobileNo: savedUser.mobileNo
+      };
+
     }
     catch(err) {
-      throw new BadRequestException('Email already exist');
+      console.log({err});
+      throw new BadRequestException('Email already taken');
     }
   }
 
@@ -46,7 +61,7 @@ export class UserService {
   }
 
   async findOneForLogin(email: string, type: string) {
-    return await this.userModel.findOne({ email, deleted: false, type }, 'email password type deleted');
+    return await this.userModel.findOne({ email, deleted: false, type }, 'email password type verified deleted');
   }
 
   async update(id: string, updateUserDto: UserDto) {

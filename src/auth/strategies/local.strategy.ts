@@ -1,6 +1,6 @@
 import { Strategy } from 'passport-custom';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 
 type loginData = {
@@ -20,6 +20,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(email, password, type);
     if (!user) {
       throw new UnauthorizedException();
+    }
+    if(!user.verified) {
+      throw new BadRequestException('Please confirm your email. Check your email for confirmation.');
     }
     return user;
   }

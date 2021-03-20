@@ -10,10 +10,10 @@ export class Customer {
     @Prop({required:true, type: Types.ObjectId, ref: User.name})
     user: Types.ObjectId;
 
-    @Prop({required:true})
+    @Prop()
     firstName:string;
 
-    @Prop({required:true})
+    @Prop()
     lastName:string;
 
 

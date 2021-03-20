@@ -1,17 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CustomerDto } from './customer.dto';
+import { Model, Types } from 'mongoose';
+import { UserService } from '../user/user.service';
 import { CustomerUpdateDto } from './customer-update.dto';
+import { CustomerDto } from './customer.dto';
 import { Customer, CustomerDocument } from './customer.schema';
-import { UserService } from '../user/user.service'
 
 
 @Injectable()
-export class CustomerService {
-  constructor( @InjectModel(Customer.name) private readonly customerModel: Model<CustomerDocument>,
+export class CustomerService implements OnModuleInit {
+
   private userService: UserService
-   ) {}
+
+  constructor( 
+    @InjectModel(Customer.name) private readonly customerModel: Model<CustomerDocument>,
+    private moduleRef: ModuleRef
+  ) {}
+
+  onModuleInit() {
+    this.userService = this.moduleRef.get(UserService, { strict: false });
+  }
 
   async create(createCustomerDto: CustomerDto): Promise<Customer> {
     const newCustomer = new this.customerModel(createCustomerDto);
@@ -34,6 +43,11 @@ export class CustomerService {
 
   async findOne(id: string) {
     return await this.customerModel.findById(id).populate('user');
+  }
+
+  async findMe(user: any) {
+    console.log({user});
+    return await this.customerModel.find({ user: Types.ObjectId(user.userId) }).populate('user');
   }
 
   async findByName(firstName: string): Promise<Customer[]> {

@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { MerchantDto } from './merchant.dto';
-import { MerchantUpdateDto } from './merchant-update.dto';
-import { Merchant, MerchantDocument } from './merchant.schema';
-import { UserService } from '../user/user.service';
 import { ServiceService } from '../service/service.service';
-import { stringify } from 'querystring';
-const querystring = require('querystring');
+import { UserService } from '../user/user.service';
+import { MerchantUpdateDto } from './merchant-update.dto';
+import { MerchantDto } from './merchant.dto';
+import { Merchant, MerchantDocument } from './merchant.schema';
 
 @Injectable()
 export class MerchantService {
@@ -24,17 +22,24 @@ export class MerchantService {
   }
 
   async findAll(filter: string): Promise<Merchant[]> {
+    let merchants
     if (filter) {
       const value = Object.values(JSON.parse(filter)).toString();
       const key = Object.keys(JSON.parse(filter))[0];
 
-      return await this.merchantModel
+      merchants =  await this.merchantModel
         .find()
         .where(key, new RegExp(value, 'i'))
         .populate('user')
         .exec();
     }
-    return await this.merchantModel.find().populate('user').exec();
+    merchants =  this.merchantModel.find().populate('user').exec();
+    merchants = { ...merchants }
+    merchants.map(async merchant => {
+      merchant.services = await this.serviceService.findByMerchantId(merchant.id)
+    })
+
+    return merchants;
   }
 
   async findServices(filter: string) {

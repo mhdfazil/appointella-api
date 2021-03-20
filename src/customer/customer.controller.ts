@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
-import { Role } from 'src/config/role';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Request } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { CustomerDto } from './customer.dto';
+import { Role } from 'src/config/role';
 import { CustomerUpdateDto } from './customer-update.dto';
+import { CustomerDto } from './customer.dto';
 import { CustomerService } from './customer.service';
-import { Customer } from './customer.schema';
 
 @Controller('customer')
 export class CustomerController {
@@ -19,6 +18,12 @@ export class CustomerController {
   @Get()
   findAll(@Query('filter') filter:string) {
     return this.customerService.findAll(filter);
+  }
+
+  @Roles(Role.Customer)
+  @Get('me')
+  getProfile(@Request() req) {
+    return this.customerService.findMe(req.user);
   }
 
   @Get(':id')

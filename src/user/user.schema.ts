@@ -10,7 +10,7 @@ export class User {
     email: string;
 
     @Prop({ required: true, minlength: 6, select: false })
-    password: string;
+    password?: string;
 
     @Prop()
     mobileNo: string;
