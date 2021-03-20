@@ -86,8 +86,8 @@ export class UserService {
     return user;
   }
 
-  verifyEmail(id: string) {
-    this.userModel.findByIdAndUpdate(id, { verified: true });
+  async verifyEmail(id: string) {
+    return await this.userModel.findByIdAndUpdate(id, { verified: true }, {new:true});
   }
 
 }

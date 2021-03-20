@@ -42,7 +42,7 @@ export class VerifyEmailService implements OnModuleInit {
         return 'Email already verified';
       }
       else if(await this.verifyEmailModel.exists({ email, code })) {
-        this.userService.verifyEmail(id);
+        await this.userService.verifyEmail(id);
         return 'Email successfully verified';
       }
       else {
@@ -63,7 +63,15 @@ export class VerifyEmailService implements OnModuleInit {
       }
       else  {
         const verifyData = await this.verifyEmailModel.findOne({ email }).exec();
-        const code = verifyData ? verifyData.code : this.generateCode();
+        let code
+        if(verifyData) {
+          code = verifyData.code
+        }
+        else {
+          code = this.generateCode();
+          const newVerify = new this.verifyEmailModel({ email, code });
+          await newVerify.save();
+        }
   
         const path = this.configService.get<string>('BASE_PATH') + `verify-email/${email}/${code}`
         return await this.emailService.verify(path, email);
