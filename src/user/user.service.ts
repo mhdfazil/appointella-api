@@ -1,10 +1,10 @@
-import { BadRequestException, forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { CustomerService } from 'src/customer/customer.service';
+import { EmailService } from 'src/email/email.service';
 import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
 ;
@@ -16,6 +16,7 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private customerService: CustomerService,
     private configService: ConfigService,
+    private emailService: EmailService
   ) {}
 
   async create(user: User): Promise<any> {
