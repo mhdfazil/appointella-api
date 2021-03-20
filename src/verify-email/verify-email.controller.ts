@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { VerifyEmailService } from './verify-email.service';
 
@@ -10,6 +10,12 @@ export class VerifyEmailController {
   @Get(':email/:code')
   verify(@Param('email') email: string, @Param('code') code: string) {
     return this.verifyEmailService.verify(email, code);
+  }
+
+  @Public()
+  @Post('resend')
+  resend(@Body() data: any) {
+    return this.verifyEmailService.resend(data.email);
   }
 
   @Public()

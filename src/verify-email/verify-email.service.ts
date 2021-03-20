@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
@@ -47,11 +47,30 @@ export class VerifyEmailService implements OnModuleInit {
       }
       else {
         // code expired
-        return 'Your verification is expired. Try again.';
+        return 'Your verification is expired. Try resend verification code.';
       }
     }
     catch(err) {
       return 'You are not registered yet. Please register with our platform';
+    }
+  }
+  
+  async resend(email: string) {
+    try {
+      const { verified } = await this.userService.isVerified(email);
+      if(verified) {
+        throw new BadRequestException('Email already verified.');
+      }
+      else  {
+        const verifyData = await this.verifyEmailModel.findOne({ email }).exec();
+        const code = verifyData ? verifyData.code : this.generateCode();
+  
+        const path = this.configService.get<string>('BASE_PATH') + `verify-email/${email}/${code}`
+        return await this.emailService.verify(path, email);
+      }
+    }
+    catch {
+      throw new BadRequestException('You are not registered yet. Please register with our platform.');
     }
   }
 
@@ -60,8 +79,6 @@ export class VerifyEmailService implements OnModuleInit {
   }
 
   generateCode() { 
-    // Declare a digits variable  
-    // which stores all digits 
     const digits = '0123456789'; 
     let code = ''; 
     for (let i = 0; i < 8; i++ ) { 

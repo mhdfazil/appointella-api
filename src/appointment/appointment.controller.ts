@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request } from '@nestjs/common';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/config/role';
 import { AppointmentDto } from './appointment.dto';
 import { AppoitmentService } from './appointment.service';
 
@@ -14,6 +16,12 @@ export class AppoitmentController {
   @Get()
   findAll() {
     return this.appoitmentService.findAll();
+  }
+
+  @Roles(Role.Customer)
+  @Get('me')
+  findByCustomerToken(@Request() req) {
+    return this.appoitmentService.findByCustomerToken(req.user);
   }
 
   @Get(':id')

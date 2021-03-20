@@ -17,6 +17,9 @@ import { UserModule } from './user/user.module';
 import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailModule } from './email/email.module';
+import * as mongoose from 'mongoose';
+
+mongoose.set('useCreateIndex', true);
 
 @Module({
   imports: [

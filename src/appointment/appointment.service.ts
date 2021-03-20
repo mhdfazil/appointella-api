@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AppointmentDto } from './appointment.dto';
 import { Appointment, AppointmentDocument } from './appointment.schema';
 
@@ -24,6 +24,10 @@ export class AppoitmentService {
 
   async findByCustomer(id: string) {
     return this.appointmentModel.find({ customer: id }).exec();
+  }
+
+  async findByCustomerToken(user: any) {
+    return this.appointmentModel.find({ customer: Types.ObjectId(user.userId) }).exec();
   }
 
   async findByCustomerDate(id: string, date: Date) {

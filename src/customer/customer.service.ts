@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -46,7 +46,6 @@ export class CustomerService implements OnModuleInit {
   }
 
   async findMe(user: any) {
-    console.log({user});
     return await this.customerModel.find({ user: Types.ObjectId(user.userId) }).populate('user');
   }
 
