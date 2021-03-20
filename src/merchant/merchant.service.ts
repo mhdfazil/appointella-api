@@ -22,24 +22,17 @@ export class MerchantService {
   }
 
   async findAll(filter: string): Promise<Merchant[]> {
-    let merchants
     if (filter) {
       const value = Object.values(JSON.parse(filter)).toString();
       const key = Object.keys(JSON.parse(filter))[0];
 
-      merchants =  await this.merchantModel
+      return await this.merchantModel
         .find()
         .where(key, new RegExp(value, 'i'))
         .populate('user')
         .exec();
     }
-    merchants =  this.merchantModel.find().populate('user').exec();
-    merchants = { ...merchants }
-    merchants.map(async merchant => {
-      merchant.services = await this.serviceService.findByMerchantId(merchant.id)
-    })
-
-    return merchants;
+    return this.merchantModel.find().populate('user').exec();
   }
 
   async findServices(filter: string) {
