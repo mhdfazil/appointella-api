@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { Role } from 'src/config/role';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AdminDto } from './admin.dto';
 import { AdminUpdateDto } from './admin-update.dto';
 import { Admin } from './admin.schema';
 import { AdminService } from './admin.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 
 @Controller('admin')
@@ -28,8 +29,9 @@ export class AdminController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() adminUpdateDto: AdminUpdateDto) {
-    return this.adminService.update(id, adminUpdateDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(@Param('id') id: string, @Body() adminUpdateDto: AdminUpdateDto, @UploadedFile() image: Express.Multer.File) {
+    return this.adminService.update(id, adminUpdateDto, image);
   }
 
   @Delete(':id')

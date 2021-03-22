@@ -52,12 +52,13 @@ export class MerchantService {
     return await this.merchantModel.findById(id).populate('user');
   }
 
-  async update(id: string, merchantUpdateDto: MerchantUpdateDto) {
+  async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
     const merchantUpdate = new this.merchantModel(merchantUpdateDto);
     this.merchantModel.findByIdAndUpdate(id, merchantUpdate, { new: true });
     return await this.userService.update(
       merchantUpdateDto.user,
       merchantUpdateDto,
+      image
     );
   }
   async remove(id: string) {

@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { MerchantService } from './merchant.service';
 import { MerchantDto } from './merchant.dto';
 import { MerchantUpdateDto } from './merchant-update.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
 import { Merchant } from './merchant.schema';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('merchant')
 export class MerchantController {
@@ -33,8 +34,9 @@ export class MerchantController {
 
   @Roles(Role.Merchant, Role.Admin)
   @Put(':id')
-  update(@Param('id') id: string, @Body() merchantUpdateDto: MerchantUpdateDto) {
-    return this.merchantService.update(id, merchantUpdateDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(@Param('id') id: string, @Body() merchantUpdateDto: MerchantUpdateDto, @UploadedFile() image: Express.Multer.File) {
+    return this.merchantService.update(id, merchantUpdateDto, image);
   }
 
   @Roles(Role.Merchant, Role.Admin)

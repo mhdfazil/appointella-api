@@ -18,6 +18,7 @@ import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailModule } from './email/email.module';
 import * as mongoose from 'mongoose';
+import * as multer from 'multer';
 
 mongoose.set('useCreateIndex', true);
 
@@ -30,7 +31,7 @@ mongoose.set('useCreateIndex', true);
       }),
       inject: [ConfigService],
     }),
-    MulterModule.register({ dest: './uploads' }),
+    MulterModule.register({ storage: multer.memoryStorage }),
     MailerModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
         transport: {
