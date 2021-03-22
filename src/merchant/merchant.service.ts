@@ -36,16 +36,19 @@ export class MerchantService {
   }
 
   async findServices(filter: string) {
-      const value = Object.values(JSON.parse(filter)).toString();
-      const key = Object.keys(JSON.parse(filter))[0];
-      const merchant =  await this.merchantModel.find().where(key, new RegExp(value, 'i')).populate('user').exec();
-      // return '{'+stringify({ id: merchant[0].id })+'}';
-      // const services =  await this.serviceService.findAll('{'+stringify({ id: merchant[0].id })+'}');
-      // return {merchant, services};
-      const services =  await this.serviceService.findByMerchantId(merchant[0].id);
-      
-      return {merchant, services};
+    const value = Object.values(JSON.parse(filter)).toString();
+    const key = Object.keys(JSON.parse(filter))[0];
+    const merchant = await this.merchantModel
+      .find()
+      .where(key, new RegExp(value, 'i'))
+      .populate('user')
+      .exec();
+    // return '{'+stringify({ id: merchant[0].id })+'}';
+    // const services =  await this.serviceService.findAll('{'+stringify({ id: merchant[0].id })+'}');
+    // return {merchant, services};
+    const services = await this.serviceService.findByMerchantId(merchant[0].id);
 
+    return { merchant, services };
   }
 
   async findOne(id: string): Promise<Merchant> {
@@ -53,13 +56,18 @@ export class MerchantService {
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
-    const merchantUpdate = new this.merchantModel(merchantUpdateDto);
-    this.merchantModel.findByIdAndUpdate(id, merchantUpdate, { new: true });
-    return await this.userService.update(
+    const merchant = await this.merchantModel.findByIdAndUpdate(
+      id,
+      merchantUpdateDto,
+      { new: true },
+    );
+    const user = this.userService.update(
       merchantUpdateDto.user,
       merchantUpdateDto,
       image
     );
+    
+    return {...user, ...merchant};
   }
   async remove(id: string) {
     return await this.merchantModel.findByIdAndRemove(id);
