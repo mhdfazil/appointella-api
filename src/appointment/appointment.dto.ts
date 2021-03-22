@@ -5,10 +5,10 @@ export class AppointmentDto {
     readonly service: Types.ObjectId;
     readonly merchant: Types.ObjectId;
     readonly date: Date;
-    readonly startTime: string;
-    readonly endTime: string;
+    readonly startTime: Date;
+    readonly endTime: Date;
     readonly subService: number;
     readonly price: number;
-    readonly position: string;
+    readonly token: number;
     readonly status: string;
 }

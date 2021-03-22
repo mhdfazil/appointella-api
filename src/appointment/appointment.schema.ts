@@ -21,20 +21,20 @@ export class Appointment {
     @Prop({ required: true, type: Date, index: true })
     date: Date;
 
-    @Prop({required:true})
-    startTime: string;
+    @Prop({type: Date})
+    startTime: Date;
 
-    @Prop({required:true})
-    endTime: string;
+    @Prop({type: Date})
+    endTime: Date;
 
-    @Prop({ required: true })
+    @Prop()
     subService: number;
 
     @Prop({ required: true })
     price: number;
 
-    @Prop({ required: true })
-    position: string;
+    @Prop()
+    token: number;
 
     @Prop({ required: true, enum: ['pending', 'accepted', 'canceled', 'completed'] })
     status: string;
