@@ -46,7 +46,7 @@ export class CustomerService implements OnModuleInit {
   }
 
   async findMe(user: any) {
-    return await this.customerModel.find({ user: Types.ObjectId(user.userId) }).populate('user');
+    return await this.customerModel.find({ user: user.userId }).populate('user');
   }
 
   async findByName(firstName: string): Promise<Customer[]> {
@@ -58,9 +58,9 @@ export class CustomerService implements OnModuleInit {
   }
 
   async update(id: string, customerUpdateDto: CustomerUpdateDto) {
-    const customerUpdate = new this.customerModel(customerUpdateDto);
-    this.customerModel.findByIdAndUpdate(id, customerUpdate, {new: true});
-    return await this.userService.update(customerUpdateDto.user, customerUpdateDto);
+    const customer = await this.customerModel.findByIdAndUpdate(id, customerUpdateDto, {new: true});
+    const user = this.userService.update(customerUpdateDto.user, customerUpdateDto);
+    return {...user, ...customer};
   }
 
   async remove(id: string) {

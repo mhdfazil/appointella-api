@@ -37,9 +37,10 @@ export class AdminService {
   }
 
   async update(id: string, adminUpdateDto: AdminUpdateDto) {
-    const updateAdmin = new this.adminModel(adminUpdateDto);
-    this.adminModel.findByIdAndUpdate(id, updateAdmin, {new: true});
-    return await this.userService.update(adminUpdateDto.user, adminUpdateDto);
+    const admin = await this.adminModel.findByIdAndUpdate(id, adminUpdateDto, {new: true});
+    const user = this.userService.update(adminUpdateDto.user, adminUpdateDto);
+
+    return {...user, ...admin};
   }
 
   async remove(id: string): Promise<Admin> {

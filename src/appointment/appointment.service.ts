@@ -15,9 +15,17 @@ export class AppoitmentService {
   ) {}
 
   async create(createAppoitmentDto: AppointmentDto) {
+    if (createAppoitmentDto.startTime) {
+      const appointment = new this.appointmentModel(createAppoitmentDto);
+      const service = await this.serviceService.findOne(
+        appointment.service.toString(),
+      );
+      appointment.endTime = new Date(
+        appointment.startTime.getTime() + service.duration * 60000,
+      );
+      return await appointment.save();
+    }
     const appointment = new this.appointmentModel(createAppoitmentDto);
-    const service = await this.serviceService.findOne(appointment.service.toString());
-    appointment.endTime = new Date(appointment.startTime.getTime() + service.duration*60000);
     return await appointment.save();
   }
 
@@ -38,9 +46,7 @@ export class AppoitmentService {
   }
 
   async findByCustomerToken(user: any) {
-    return this.appointmentModel
-      .find({ customer: Types.ObjectId(user.userId) })
-      .exec();
+    return await this.appointmentModel.find({ customer: user.userId }).exec();
   }
 
   async findByCustomerDate(id: string, date: Date) {

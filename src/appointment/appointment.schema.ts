@@ -1,21 +1,20 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
-import { Customer } from "src/customer/customer.schema";
 import { Service } from "src/service/service.schema";
-import { Merchant } from "src/merchant/merchant.schema";
+import { User } from "src/user/user.schema";
 
 export type AppointmentDocument = Appointment & Document;
 
 @Schema({ timestamps: true })
 export class Appointment {
 
-    @Prop({ required:true, type: Types.ObjectId, ref: Customer.name })
+    @Prop({ required:true, type: Types.ObjectId, ref: User.name })
     customer: Types.ObjectId;
 
     @Prop({ required: true, type: Types.ObjectId, ref: Service.name })
     service: Types.ObjectId;
     
-    @Prop({ required: true, type: Types.ObjectId, ref: Merchant.name })
+    @Prop({ required: true, type: Types.ObjectId, ref: User.name })
     merchant: Types.ObjectId;
 
     @Prop({ required: true, type: Date, index: true })
