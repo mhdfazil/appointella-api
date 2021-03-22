@@ -26,6 +26,10 @@ export class AppoitmentService {
     return this.appointmentModel.find({ customer: id }).exec();
   }
 
+  async findByMerchant(id: string) {
+    return this.appointmentModel.find({ merchant: id }).exec();
+  }
+
   async findByCustomerToken(user: any) {
     return this.appointmentModel.find({ customer: Types.ObjectId(user.userId) }).exec();
   }

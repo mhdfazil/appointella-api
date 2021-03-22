@@ -34,6 +34,11 @@ export class AppoitmentController {
     return this.appoitmentService.findByCustomer(id);
   }
 
+  @Get('merchant/:id')
+  findByMerchant(@Param('id') id: string) {
+    return this.appoitmentService.findByMerchant(id);
+  }
+
   @Get('customer/:id')
   findByCustomerDate(@Param('id') id: string, @Query('date') date: Date) {
     return this.appoitmentService.findByCustomerDate(id, date);
