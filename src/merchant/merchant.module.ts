@@ -12,6 +12,7 @@ import { UserModule } from 'src/user/user.module';
     ServiceModule,
     UserModule
   ],
+  exports:[MerchantService],
   controllers: [MerchantController],
   providers: [MerchantService]
 })

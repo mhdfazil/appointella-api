@@ -55,6 +55,11 @@ export class MerchantService {
     return await this.merchantModel.findById(id).populate('user');
   }
 
+  async findBy(attr: any): Promise<Merchant> {
+    console.log("_ID", attr);    
+    return await this.merchantModel.findOne(attr).populate('user');
+  }
+
   async update(id: string, merchantUpdateDto: MerchantUpdateDto) {
     const merchant = await this.merchantModel.findByIdAndUpdate(
       id,

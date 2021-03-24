@@ -5,6 +5,8 @@ import { AppointmentDto } from './appointment.dto';
 import { Appointment, AppointmentDocument } from './appointment.schema';
 import { ServiceService } from '../service/service.service';
 import { exec } from 'child_process';
+import { MerchantService } from 'src/merchant/merchant.service';
+import { Merchant } from 'src/merchant/merchant.schema';
 
 @Injectable()
 export class AppoitmentService {
@@ -12,6 +14,7 @@ export class AppoitmentService {
     @InjectModel(Appointment.name)
     private readonly appointmentModel: Model<AppointmentDocument>,
     private serviceService: ServiceService,
+    private merchantService: MerchantService
   ) {}
 
   async create(createAppoitmentDto: AppointmentDto) {
@@ -46,7 +49,17 @@ export class AppoitmentService {
   }
 
   async findByCustomerToken(user: any) {
-    return await this.appointmentModel.find({ customer: user.userId }).exec();
+    let appointment = await this.appointmentModel.find({ customer: user.userId }).populate('service').exec() as any
+    await appointment.map(async app => {
+      const merchant = await this.merchantService.findBy({ user: app.merchant })
+      console.log("merchant",merchant);
+      app = {
+        ...app,
+        merchant
+      }
+    })
+   
+    return appointment
   }
 
   async findByCustomerDate(id: string, date: Date) {

@@ -46,7 +46,7 @@ export class CustomerService implements OnModuleInit {
   }
 
   async findMe(user: any) {
-    return await this.customerModel.find({ user: user.userId }).populate('user');
+    return await this.customerModel.find({ user: user.userId }).populate('user').exec();
   }
 
   async findByName(firstName: string): Promise<Customer[]> {

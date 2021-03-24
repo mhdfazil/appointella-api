@@ -5,12 +5,14 @@ import { MerchantUpdateDto } from './merchant-update.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
 import { Merchant } from './merchant.schema';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('merchant')
 export class MerchantController {
   constructor(private readonly merchantService: MerchantService) {}
 
-  @Roles(Role.Merchant, Role.Admin)
+
+  @Public()
   @Post()
   create(@Body() createMerchantDto: MerchantDto) {
     return this.merchantService.create(createMerchantDto);
