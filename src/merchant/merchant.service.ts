@@ -56,8 +56,7 @@ export class MerchantService {
   }
 
   async findBy(attr: any): Promise<Merchant> {
-    console.log("_ID", attr);    
-    return await this.merchantModel.findOne(attr).populate('user');
+    return await this.merchantModel.findOne(attr).populate('user').exec();
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
