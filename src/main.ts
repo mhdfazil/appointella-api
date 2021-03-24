@@ -10,7 +10,9 @@ async function bootstrap() {
 
   
   cloudinary.config({
-    long_url_signature: configService.get('CLOUDINARY_URL')
+    api_key: configService.get('CLOUDINARY_API_KEY'),
+    cloud_name: configService.get('CLOUDINARY_CLOUD_NAME'),
+    api_secret: configService.get('CLOUDINARY_API_SECRET'),
   });
   
   app.use(helmet());
