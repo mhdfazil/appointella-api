@@ -60,7 +60,7 @@ export class MerchantService {
     return await this.merchantModel.findOne(attr).populate('user');
   }
 
-  async update(id: string, merchantUpdateDto: MerchantUpdateDto) {
+  async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
     const merchant = await this.merchantModel.findByIdAndUpdate(
       id,
       merchantUpdateDto,
@@ -69,6 +69,7 @@ export class MerchantService {
     const user = this.userService.update(
       merchantUpdateDto.user,
       merchantUpdateDto,
+      image
     );
     
     return {...user, ...merchant};

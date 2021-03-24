@@ -12,7 +12,7 @@ export class VerifyEmail {
     @Prop({ required: true })
     code: string;
 
-    @Prop({ type: Date, default: Date.now, expires: 1800 })
+    @Prop({ type: Date, default: Date.now, expires: 18000 })
     expiresAt: Date;
 
 }

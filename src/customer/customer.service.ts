@@ -57,9 +57,9 @@ export class CustomerService implements OnModuleInit {
     return customer;  
   }
 
-  async update(id: string, customerUpdateDto: CustomerUpdateDto) {
+  async update(id: string, customerUpdateDto: CustomerUpdateDto, image: Express.Multer.File) {
     const customer = await this.customerModel.findByIdAndUpdate(id, customerUpdateDto, {new: true});
-    const user = this.userService.update(customerUpdateDto.user, customerUpdateDto);
+    const user = this.userService.update(customerUpdateDto.user, customerUpdateDto, image);
     return {...user, ...customer};
   }
 

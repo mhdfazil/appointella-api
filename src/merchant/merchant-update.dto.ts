@@ -12,8 +12,7 @@ export class MerchantUpdateDto{
     readonly addressLine1: string;
     readonly addressLine2: string;
     readonly type: string;
-    readonly image: string;
+    image?: string;
     readonly deleted: boolean;
-
 
 }

@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
+import imageUpload from 'src/config/imageUpload';
 import { CustomerService } from 'src/customer/customer.service';
 import { VerifyEmailService } from 'src/verify-email/verify-email.service';
 import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
-;
 
 @Injectable()
 export class UserService {
@@ -71,7 +71,11 @@ export class UserService {
     return await this.userModel.findOne({ email, deleted: false, type }, 'email password type verified deleted');
   }
 
-  async update(id: string, updateUserDto: UserDto) {
+  async update(id: string, updateUserDto: UserDto, image: Express.Multer.File) {
+    if(image) {
+      const result = await imageUpload(image.buffer);
+      updateUserDto.image = result.url;
+    }
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {new:true});
   }
 

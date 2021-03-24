@@ -36,11 +36,10 @@ export class AdminService {
     return await this.adminModel.findById(id).populate('user');
   }
 
-  async update(id: string, adminUpdateDto: AdminUpdateDto) {
-    const admin = await this.adminModel.findByIdAndUpdate(id, adminUpdateDto, {new: true});
-    const user = this.userService.update(adminUpdateDto.user, adminUpdateDto);
-
-    return {...user, ...admin};
+  async update(id: string, adminUpdateDto: AdminUpdateDto, image: Express.Multer.File) {
+    const updateAdmin = new this.adminModel(adminUpdateDto);
+    this.adminModel.findByIdAndUpdate(id, updateAdmin, {new: true});
+    return await this.userService.update(adminUpdateDto.user, adminUpdateDto, image);
   }
 
   async remove(id: string): Promise<Admin> {

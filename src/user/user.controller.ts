@@ -32,8 +32,9 @@ export class UserController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
-    return this.userService.update(id, updateUserDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(@Param('id') id: string, @Body() updateUserDto: UserDto, @UploadedFile() image: Express.Multer.File) {
+    return this.userService.update(id, updateUserDto, image);
   }
 
   @Delete(':id')

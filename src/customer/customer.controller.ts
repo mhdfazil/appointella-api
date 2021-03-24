@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Request, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
 import { CustomerUpdateDto } from './customer-update.dto';
@@ -33,8 +34,9 @@ export class CustomerController {
 
   @Roles(Role.Customer, Role.Admin)
   @Put(':id')
-  update(@Param('id') id: string, @Body() customerUpdateDto: CustomerUpdateDto) {
-    return this.customerService.update(id, customerUpdateDto);
+  @UseInterceptors(FileInterceptor('image'))
+  update(@Param('id') id: string, @Body() customerUpdateDto: CustomerUpdateDto, @UploadedFile() image: Express.Multer.File) {
+    return this.customerService.update(id, customerUpdateDto, image);
   }
 
   @Delete(':id')
