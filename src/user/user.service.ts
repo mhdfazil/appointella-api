@@ -2,9 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import imageUpload from 'src/config/imageUpload';
 import { CustomerService } from 'src/customer/customer.service';
+import { MerchantService } from 'src/merchant/merchant.service';
 import { VerifyEmailService } from 'src/verify-email/verify-email.service';
 import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
@@ -15,6 +16,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private customerService: CustomerService,
+    private merchantService: MerchantService,
     private configService: ConfigService,
     private verifyEmailService: VerifyEmailService
   ) {}
@@ -68,7 +70,23 @@ export class UserService {
   }
 
   async findOneForLogin(email: string, type: string) {
-    return await this.userModel.findOne({ email, deleted: false, type }, 'email password type verified deleted');
+    const user = await this.userModel.findOne({ email, deleted: false, type }, 'email password type verified deleted');
+    if(user && type === 'customer') {
+      const { id } = await this.customerService.findBy({ user: Types.ObjectId(user.id) })
+      return {
+        email: user.email,
+        password: user.password,
+        verified: user.verified,
+        type: user.type,
+        id
+      }
+    }
+    else if(user && type === 'merchant') {
+      const { id } = await this.merchantService.findBy({ user: Types.ObjectId(user.id) })
+      user.id = id
+    }
+    
+    return user
   }
 
   async update(id: string, updateUserDto: UserDto, image: Express.Multer.File) {

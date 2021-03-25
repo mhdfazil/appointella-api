@@ -3,12 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { CustomerService } from 'src/customer/customer.service';
 
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
+    private customerService: CustomerService,
     private jwtService: JwtService
     ) {}
 
@@ -25,10 +27,15 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.id, role: user.role };
+  async login(loggedUser: any) {
+    let user;
+    const access_token = this.jwtService.sign({ email: loggedUser.email, sub: loggedUser.id, role: loggedUser.role })
+    if(loggedUser.role === 'customer') {
+      user = await this.customerService.findOne(loggedUser.id)      
+    }
     return {
-      access_token: this.jwtService.sign(payload),
-    };
+      access_token,
+      user
+    }
   }
 }

@@ -9,8 +9,7 @@ import { UserModule } from 'src/user/user.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema }]),
-    ServiceModule,
-    UserModule
+    ServiceModule
   ],
   exports:[MerchantService],
   controllers: [MerchantController],

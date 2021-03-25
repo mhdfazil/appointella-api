@@ -49,14 +49,15 @@ export class AppoitmentService {
   }
 
   async findByCustomerToken(user: any): Promise<any> {
-    let appointment = await this.appointmentModel.find({ customer: user.userId }).populate('service').exec() as any
-    const nappointment = await Promise.all(appointment.map(async app => {
-      const merchant = await this.merchantService.findBy({ user: Types.ObjectId(app.merchant) });
-      console.log("merchant>>>>>>", merchant);
-      app.merchant = merchant
-      return app
-    }))
-    return nappointment
+    // let appointment = await this.appointmentModel.find({ customer: user.userId }).populate('service').exec() as any
+    // const nappointment = await Promise.all(appointment.map(async app => {
+    //   const merchant = await this.merchantService.findBy({ user: Types.ObjectId(app.merchant) });
+    //   app.merchant = merchant
+    //   return app
+    // }))
+    // return nappointment
+
+    return await this.appointmentModel.find({customer: user.userId}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec()
   }
 
   async findByCustomerDate(id: string, date: Date) {

@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ServiceService } from '../service/service.service';
@@ -8,13 +9,20 @@ import { MerchantDto } from './merchant.dto';
 import { Merchant, MerchantDocument } from './merchant.schema';
 
 @Injectable()
-export class MerchantService {
+export class MerchantService implements OnModuleInit {
+  
+  private userService: UserService
+
   constructor(
     @InjectModel(Merchant.name)
     private readonly merchantModel: Model<MerchantDocument>,
-    private userService: UserService,
     private serviceService: ServiceService,
+    private moduleRef: ModuleRef
   ) {}
+  
+  onModuleInit() {
+    this.userService = this.moduleRef.get(UserService, { strict: false });
+  }
 
   async create(createMerchantDto: MerchantDto): Promise<Merchant> {
     const newMerchant = new this.merchantModel(createMerchantDto);
@@ -43,9 +51,6 @@ export class MerchantService {
       .where(key, new RegExp(value, 'i'))
       .populate('user')
       .exec();
-    // return '{'+stringify({ id: merchant[0].id })+'}';
-    // const services =  await this.serviceService.findAll('{'+stringify({ id: merchant[0].id })+'}');
-    // return {merchant, services};
     const services = await this.serviceService.findByMerchantId(merchant[0].id);
 
     return { merchant, services };
@@ -55,8 +60,8 @@ export class MerchantService {
     return await this.merchantModel.findById(id).populate('user');
   }
 
-  async findBy(attr: any): Promise<Merchant> {
-    return await this.merchantModel.findOne(attr).populate('user').exec();
+  async findBy(attr: any): Promise<any> {
+    return await this.merchantModel.findOne(attr).populate('user');
   }
 
   async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
@@ -65,7 +70,7 @@ export class MerchantService {
       merchantUpdateDto,
       { new: true },
     );
-    const user = this.userService.update(
+    const user = await this.userService.update(
       merchantUpdateDto.user,
       merchantUpdateDto,
       image
