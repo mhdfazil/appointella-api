@@ -45,7 +45,7 @@ export class AppoitmentService {
   }
 
   async findByMerchant(id: string) {
-    return await this.appointmentModel.find({ merchant: id }).populate('service').exec();
+    return await this.appointmentModel.find({ merchant: id }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
   }
 
   async findByCustomerToken(user: any): Promise<any> {
