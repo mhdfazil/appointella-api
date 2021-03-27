@@ -64,7 +64,7 @@ export class MerchantService implements OnModuleInit {
     return await this.merchantModel.findOne(attr).populate('user');
   }
 
-  async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {
+  async update(id: string, merchantUpdateDto: MerchantUpdateDto, image: Express.Multer.File) {    
     const merchant = await this.merchantModel.findByIdAndUpdate(
       id,
       merchantUpdateDto,
@@ -76,7 +76,7 @@ export class MerchantService implements OnModuleInit {
       image
     );
     
-    return {...user, ...merchant};
+    return {user, merchant};
   }
   async remove(id: string) {
     return await this.merchantModel.findByIdAndRemove(id);
