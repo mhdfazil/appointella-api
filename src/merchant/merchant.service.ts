@@ -71,7 +71,7 @@ export class MerchantService implements OnModuleInit {
       { new: true },
     );
     const user = await this.userService.update(
-      merchantUpdateDto.user,
+      merchant.user.toString(),
       merchantUpdateDto,
       image
     );

@@ -38,7 +38,7 @@ export class AdminService {
 
   async update(id: string, adminUpdateDto: AdminUpdateDto, image: Express.Multer.File) {
     const admin = await this.adminModel.findByIdAndUpdate(id, adminUpdateDto, {new: true});
-    const user = await this.userService.update(adminUpdateDto.user, adminUpdateDto, image);
+    const user = await this.userService.update(admin.user.toString(), adminUpdateDto, image);
     return {admin, user}
   }
 

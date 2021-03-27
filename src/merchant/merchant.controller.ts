@@ -34,7 +34,8 @@ export class MerchantController {
     return this.merchantService.findOne(id);
   }
 
-  @Roles(Role.Merchant, Role.Admin)
+  @Public()
+  // @Roles(Role.Merchant, Role.Admin)
   @Put(':id')
   @UseInterceptors(FileInterceptor('image'))
   update(@Param('id') id: string, @Body() merchantUpdateDto: MerchantUpdateDto, @UploadedFile() image: Express.Multer.File) {
