@@ -19,6 +19,7 @@ export class MerchantController {
     return this.merchantService.create(createMerchantDto);
   }
 
+  @Public()
   @Get()
   findAll(@Query('filter') filter: string) {
     return this.merchantService.findAll(filter);
