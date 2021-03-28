@@ -43,19 +43,6 @@ export class MerchantService implements OnModuleInit {
     return this.merchantModel.find().populate('user').exec();
   }
 
-  async findServices(filter: string) {
-    const value = Object.values(JSON.parse(filter)).toString();
-    const key = Object.keys(JSON.parse(filter))[0];
-    const merchant = await this.merchantModel
-      .find()
-      .where(key, new RegExp(value, 'i'))
-      .populate('user')
-      .exec();
-    const services = await this.serviceService.findByMerchantId(merchant[0].id);
-
-    return { merchant, services };
-  }
-
   async findOne(id: string): Promise<Merchant> {
     return await this.merchantModel.findById(id).populate('user');
   }

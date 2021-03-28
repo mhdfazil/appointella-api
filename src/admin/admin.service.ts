@@ -1,17 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AdminDto } from './admin.dto';
 import { AdminUpdateDto } from './admin-update.dto';
 import { UserService } from '../user/user.service'
 import { Admin, AdminDocument } from './admin.schema';
+import { ModuleRef } from '@nestjs/core';
 
 @Injectable()
-export class AdminService {
-
-  constructor( @InjectModel(Admin.name) private readonly adminModel: Model<AdminDocument>,
+export class AdminService implements OnModuleInit {
+  
   private userService: UserService
+
+  constructor( 
+    @InjectModel(Admin.name) private readonly adminModel: Model<AdminDocument>,
+    private moduleRef: ModuleRef
   ) {}
+  
+  onModuleInit() {
+    this.userService = this.moduleRef.get(UserService, { strict: false });
+  }
 
   async create(createAdminDto: AdminDto): Promise<Admin> {
     const newAdmin = new this.adminModel(createAdminDto);

@@ -1,21 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
+import { ServiceService } from '../service/service.service';
 import { AppointmentDto } from './appointment.dto';
 import { Appointment, AppointmentDocument } from './appointment.schema';
-import { ServiceService } from '../service/service.service';
-import { exec } from 'child_process';
-import { MerchantService } from 'src/merchant/merchant.service';
-import { Merchant } from 'src/merchant/merchant.schema';
 
 @Injectable()
-export class AppoitmentService {
+export class AppoitmentService implements OnModuleInit {
+  
+  private serviceService: ServiceService;
+
   constructor(
     @InjectModel(Appointment.name)
     private readonly appointmentModel: Model<AppointmentDocument>,
-    private serviceService: ServiceService,
-    private merchantService: MerchantService
+    private moduleRef: ModuleRef
   ) {}
+
+  onModuleInit() {
+    this.serviceService = this.moduleRef.get(ServiceService, { strict: false });
+  }
 
   async create(createAppoitmentDto: AppointmentDto) {
     if (createAppoitmentDto.startTime) {
@@ -62,6 +66,10 @@ export class AppoitmentService {
 
   async findByCustomerDate(id: string, date: Date) {
     return this.appointmentModel.find({ customer: id, date: date }).exec();
+  }
+
+  async findByServiceDate(id: string, date: Date) {
+    return this.appointmentModel.findOne({ service: id, date}).sort('-created_at').exec();
   }
 
   async update(id: string, appoitmentDto: AppointmentDto) {

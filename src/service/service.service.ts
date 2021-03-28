@@ -1,15 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AppoitmentService } from '../appointment/appointment.service';
 import { ServiceDto } from './service.dto';
 import { Service, ServiceDocument } from './service.schema';
 
+
 @Injectable()
-export class ServiceService {
+export class ServiceService implements OnModuleInit {
+  
+  private appoitmentService: AppoitmentService;
+
   constructor(
     @InjectModel(Service.name)
     private readonly serviceModel: Model<ServiceDocument>,
+    private moduleRef: ModuleRef
   ) {}
+
+  onModuleInit() {
+    this.appoitmentService = this.moduleRef.get(AppoitmentService, { strict: false });
+  }
 
   async create(ServiceDto: ServiceDto) {
     const Service = new this.serviceModel(ServiceDto);
@@ -30,12 +41,35 @@ export class ServiceService {
     return await this.serviceModel.find().populate('merchant').exec();
   }
 
-  async findByMerchantId(id: string) {
-    return this.serviceModel.find({ merchant: id }).exec();
-  }
-
   async findOne(id: string) {
     return this.serviceModel.findOne({ _id: id });
+  }
+
+  async findToken(id: string, date: Date) {
+    let token
+    const appointment = await this.appoitmentService.findByServiceDate(id, date);
+    const service = await this.serviceModel.findById(id).populate('merchant') as any;
+
+    if(service.type != 'number')
+      throw new BadRequestException('Invalid service type.')
+
+    const maxCount = service.maxCount;
+    const duration = service.duration;
+    const startTime: Date = service.merchant.openTime;
+
+    if(appointment)
+      token = appointment.token
+    else
+      token = 0
+
+    if(token >= maxCount)
+      throw new BadRequestException('No booking available')
+
+    const time = new Date(startTime.getTime() + duration * token * 60000)
+
+    token = token + 1
+    
+    return {token, time};
   }
 
   async update(id: string, service: Service) {

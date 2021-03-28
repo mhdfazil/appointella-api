@@ -10,20 +10,20 @@ export class Merchant {
     @Prop({required:true, type:Types.ObjectId, ref: User.name})
     user: Types.ObjectId;
 
-    @Prop({required:true})
+    @Prop()
     name:string;
 
-    @Prop({required:true})
+    @Prop()
     longitude:string;
 
-    @Prop({required:true})
+    @Prop()
     latitude:string
 
-    @Prop({required:true})
-    openTime:string
+    @Prop()
+    openTime:Date
 
-    @Prop({required:true})
-    closeTime:string
+    @Prop()
+    closeTime:Date
 
 }
 

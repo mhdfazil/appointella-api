@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { CustomerModule } from 'src/customer/customer.module';
+import { MerchantModule } from 'src/merchant/merchant.module';
 import { UserModule } from 'src/user/user.module';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -23,6 +24,7 @@ import { LocalStrategy } from './strategies/local.strategy';
       inject: [ConfigService],
     }),
     CustomerModule,
+    MerchantModule
   ],
   providers: [
     AuthService, 

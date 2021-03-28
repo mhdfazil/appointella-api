@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CustomerService } from 'src/customer/customer.service';
+import { MerchantService } from 'src/merchant/merchant.service';
 
 
 @Injectable()
@@ -11,6 +12,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private customerService: CustomerService,
+    private merchantService: MerchantService,
     private jwtService: JwtService
     ) {}
 
@@ -32,6 +34,10 @@ export class AuthService {
     const access_token = this.jwtService.sign({ email: loggedUser.email, sub: loggedUser.id, role: loggedUser.role })
     if(loggedUser.role === 'customer') {
       user = await this.customerService.findOne(loggedUser.id)      
+    }
+    if(loggedUser.role === 'merchant') {
+      user = await this.merchantService.findOne(loggedUser.id) 
+      user = user._id    
     }
     return {
       access_token,

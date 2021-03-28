@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model, Types } from 'mongoose';
+import { AdminService } from 'src/admin/admin.service';
 import imageUpload from 'src/config/imageUpload';
 import { CustomerService } from 'src/customer/customer.service';
 import { MerchantService } from 'src/merchant/merchant.service';
@@ -11,15 +13,22 @@ import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
+
+  private adminService: AdminService
 
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private moduleRef: ModuleRef,
     private customerService: CustomerService,
     private merchantService: MerchantService,
     private configService: ConfigService,
-    private verifyEmailService: VerifyEmailService
+    private verifyEmailService: VerifyEmailService,
   ) {}
+
+  onModuleInit() {
+    this.adminService = this.moduleRef.get(AdminService, { strict: false });
+  }
 
   async create(user: User): Promise<any> {
     const hash = await bcrypt.hash(user.password, parseInt(this.configService.get<string>('SALT_ROUND')));
@@ -33,6 +42,14 @@ export class UserService {
       // save customer
       if(user.type === 'customer') {
         this.customerService.create({ user: savedUser._id })
+      }
+      // save merchant
+      if(user.type === 'merchant') {
+        this.merchantService.create({ user: savedUser._id })
+      }
+      // save merchant
+      if(user.type === 'admin') {
+        this.adminService.create({ user: savedUser._id })
       }
 
       // send email verification
@@ -83,7 +100,13 @@ export class UserService {
     }
     else if(user && type === 'merchant') {
       const { id } = await this.merchantService.findBy({ user: Types.ObjectId(user.id) })
-      user.id = id
+      return {
+        email: user.email,
+        password: user.password,
+        verified: user.verified,
+        type: user.type,
+        id
+      }
     }
     
     return user

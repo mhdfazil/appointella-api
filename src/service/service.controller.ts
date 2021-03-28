@@ -16,7 +16,10 @@ export class ServiceController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @Query('date') date:Date) {
+    if(date){
+      return this.serviceService.findToken(id, date);
+    }
     return this.serviceService.findOne(id);
   }
 

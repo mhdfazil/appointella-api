@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AdminModule } from 'src/admin/admin.module';
 import { CustomerModule } from 'src/customer/customer.module';
 import { MerchantModule } from 'src/merchant/merchant.module';
 import { VerifyEmailModule } from 'src/verify-email/verify-email.module';
@@ -12,7 +13,8 @@ import { UserService } from './user.service';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     CustomerModule,
     VerifyEmailModule,
-    MerchantModule
+    MerchantModule,
+    AdminModule
   ],
   controllers: [UserController],
   providers: [UserService],
