@@ -52,6 +52,16 @@ export class AppoitmentService implements OnModuleInit {
     return await this.appointmentModel.find({ merchant: id }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
   }
 
+  
+  async findByServiceCurrentDate(id: string) {
+    const [month, date, year] = new Date().toLocaleDateString("en-US").split("/")  
+    const currentDate: Date = new Date(+year,+month-1, +date)
+    const weekDate: Date = new Date(currentDate)
+    weekDate.setDate(currentDate.getDate()+7)
+    
+    return await this.appointmentModel.find({ service: id,  date: {$gte: currentDate, $lt: weekDate}}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+  }
+
   async findByCustomerToken(user: any): Promise<any> {
     // let appointment = await this.appointmentModel.find({ customer: user.userId }).populate('service').exec() as any
     // const nappointment = await Promise.all(appointment.map(async app => {
@@ -68,7 +78,7 @@ export class AppoitmentService implements OnModuleInit {
     return this.appointmentModel.find({ customer: id, date: date }).exec();
   }
 
-  async findByServiceDate(id: string, date: Date) {
+  async findByServiceLastToken(id: string, date: Date) {
     return this.appointmentModel.findOne({ service: id, date}).sort('-created_at').exec();
   }
 
