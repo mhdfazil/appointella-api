@@ -5,8 +5,8 @@ export class MerchantUpdateDto{
     readonly latitude:string;
     readonly openTime:Date;
     readonly closeTime:Date;
-    readonly username: string;
     readonly password: string;
+    readonly currentPassword: string;
     readonly email: string;
     readonly mobileNo: string;
     readonly addressLine1: string;

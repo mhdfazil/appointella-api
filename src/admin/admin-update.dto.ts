@@ -3,6 +3,7 @@ export class AdminUpdateDto{
     readonly firstName:string;
     readonly lastName:string;
     readonly username: string;
+    readonly currentPassword: string;
     readonly password: string;
     readonly email: string;
     readonly mobileNo: string;

@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import * as bcrypt from 'bcrypt';
 import { Model, Types } from 'mongoose';
 import { AdminService } from 'src/admin/admin.service';
 import imageUpload from 'src/config/imageUpload';
@@ -11,6 +10,7 @@ import { MerchantService } from 'src/merchant/merchant.service';
 import { VerifyEmailService } from 'src/verify-email/verify-email.service';
 import { UserDto } from './user.dto';
 import { User, UserDocument } from './user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -117,6 +117,27 @@ export class UserService implements OnModuleInit {
       const result = await imageUpload(image.buffer);
       updateUserDto.image = result.url;
     }
+
+    // update password
+    if(updateUserDto.password && updateUserDto.currentPassword) {
+
+      if(updateUserDto.password.length < 6)
+        throw new BadRequestException('Password must be more than 5 characters.')
+      
+      const user = await this.userModel.findById(id).select('password').exec();
+      
+      if(await bcrypt.compare(updateUserDto.currentPassword, user.password)) {
+        const password = await bcrypt.hash(updateUserDto.password, parseInt(this.configService.get<string>('SALT_ROUND')));        
+        return await this.userModel.findByIdAndUpdate(id, { password }, {new:true});
+      }
+      else {
+        throw new BadRequestException('Invalid current password.')
+      }
+    }
+
+    if(updateUserDto.password) 
+      delete updateUserDto.password
+
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {new:true});
   }
 

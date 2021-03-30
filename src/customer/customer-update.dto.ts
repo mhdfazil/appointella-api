@@ -2,6 +2,7 @@ export class CustomerUpdateDto{
     readonly user:string;
     readonly firstName:string;
     readonly lastName:string;
+    readonly currentPassword: string;
     readonly password: string;
     readonly email: string;
     readonly mobileNo: string;
