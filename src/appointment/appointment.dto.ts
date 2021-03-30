@@ -7,7 +7,6 @@ export class AppointmentDto {
     readonly date: Date;
     readonly startTime: Date;
     readonly endTime: Date;
-    readonly subService: number;
     readonly price: number;
     readonly token: number;
     readonly status: string;

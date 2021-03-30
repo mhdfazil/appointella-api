@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, Delete, Query, Request } from '@nestjs/common';
+import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/config/role';
 import { AppointmentDto } from './appointment.dto';
@@ -44,6 +45,7 @@ export class AppoitmentController {
     return this.appoitmentService.findByCustomerDate(id, date);
   }
 
+  @Public()
   @Get('service/:id')
   findByServiceCurrentDate(@Param('id') id: string) {
     return this.appoitmentService.findByServiceCurrentDate(id);

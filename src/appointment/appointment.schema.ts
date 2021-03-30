@@ -27,9 +27,6 @@ export class Appointment {
     @Prop({type: Date})
     endTime: Date;
 
-    @Prop()
-    subService: number;
-
     @Prop({ required: true })
     price: number;
 

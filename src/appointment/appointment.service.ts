@@ -55,10 +55,11 @@ export class AppoitmentService implements OnModuleInit {
   
   async findByServiceCurrentDate(id: string) {
     const [month, date, year] = new Date().toLocaleDateString("en-US").split("/")  
-    const UTCdate: Date = new Date(+year,+month, +date)
-    const UTCweekDate: Date = new Date(UTCdate)
-    UTCweekDate.setDate(UTCdate.getDate()+7)
-    return await this.appointmentModel.find({ service: id,  date: {$gt: UTCdate, $lt: UTCweekDate}}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+    const currentDate: Date = new Date(+year,+month-1, +date)
+    const weekDate: Date = new Date(currentDate)
+    weekDate.setDate(currentDate.getDate()+7)
+    
+    return await this.appointmentModel.find({ service: id,  date: {$gte: currentDate, $lt: weekDate}}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
   }
 
   async findByCustomerToken(user: any): Promise<any> {
