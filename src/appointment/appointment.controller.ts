@@ -44,6 +44,11 @@ export class AppoitmentController {
     return this.appoitmentService.findByCustomerDate(id, date);
   }
 
+  @Get('service/:id')
+  findByServiceCurrentDate(@Param('id') id: string) {
+    return this.appoitmentService.findByServiceCurrentDate(id);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() appoitmentDto: AppointmentDto) {
     return this.appoitmentService.update(id, appoitmentDto);

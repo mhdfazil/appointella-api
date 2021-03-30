@@ -47,7 +47,7 @@ export class ServiceService implements OnModuleInit {
 
   async findToken(id: string, date: Date) {
     let token
-    const appointment = await this.appoitmentService.findByServiceDate(id, date);
+    const appointment = await this.appoitmentService.findByServiceLastToken(id, date);
     const service = await this.serviceModel.findById(id).populate('merchant') as any;
 
     if(service.type != 'number')
