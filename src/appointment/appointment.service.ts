@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -22,18 +22,28 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async create(createAppoitmentDto: AppointmentDto) {
-    if (createAppoitmentDto.startTime) {
-      const appointment = new this.appointmentModel(createAppoitmentDto);
-      const service = await this.serviceService.findOne(
-        appointment.service.toString(),
-      );
-      appointment.endTime = new Date(
-        appointment.startTime.getTime() + service.duration * 60000,
-      );
-      return await appointment.save();
-    }
+    const service = await this.serviceService.findOne(createAppoitmentDto.service.toHexString())
     const appointment = new this.appointmentModel(createAppoitmentDto);
-    return await appointment.save();
+
+    if(service && service.type === 'time') {
+      if (createAppoitmentDto.startTime) {
+        const service = await this.serviceService.findOne(
+          appointment.service.toString(),
+        );
+        appointment.endTime = new Date(
+          appointment.startTime.getTime() + service.duration * 60000,
+        );
+        return await appointment.save();
+      }
+    }
+    else if(service) {
+      const { token, time } = await this.serviceService.findToken(service.id, createAppoitmentDto.date)
+      appointment.token = token
+      appointment.startTime = time
+      return await appointment.save()
+    }
+    
+    throw new BadRequestException('Invalid inputs.')
   }
 
   async findAll() {
