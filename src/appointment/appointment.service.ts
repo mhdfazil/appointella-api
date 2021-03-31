@@ -22,7 +22,7 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async create(createAppoitmentDto: AppointmentDto) {
-    const service = await this.serviceService.findOne(createAppoitmentDto.service.toHexString())
+    const service = await this.serviceService.findOne(createAppoitmentDto.service.toString())
     const appointment = new this.appointmentModel(createAppoitmentDto);
 
     if(service && service.type === 'time') {
