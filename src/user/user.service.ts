@@ -141,6 +141,10 @@ export class UserService implements OnModuleInit {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, {new:true});
   }
 
+  async updatePassword(id: string, password: string) {
+    return await this.userModel.findByIdAndUpdate(id, { password }, {new:true});
+  }
+
   remove(id: string) {
     return this.userModel.findByIdAndRemove(id);
   }

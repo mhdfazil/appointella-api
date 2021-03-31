@@ -3,11 +3,16 @@ import { AppModule } from './app.module';
 import * as helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
+  app.useStaticAssets(join(__dirname, '..', 'src/public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'src/assets/views'));
+  app.setViewEngine('hbs');
   
   cloudinary.config({
     api_key: configService.get('CLOUDINARY_API_KEY'),

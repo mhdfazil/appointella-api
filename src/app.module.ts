@@ -17,6 +17,7 @@ import { UserModule } from './user/user.module';
 import { VerifyEmailModule } from './verify-email/verify-email.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailModule } from './email/email.module';
+import { ResetPasswordModule } from './reset-password/reset-password.module';
 import * as mongoose from 'mongoose';
 import * as multer from 'multer';
 
@@ -66,7 +67,8 @@ mongoose.set('useCreateIndex', true);
     CustomerModule, 
     AuthModule, 
     VerifyEmailModule,
-    EmailModule
+    EmailModule,
+    ResetPasswordModule
   ],
   controllers: [AppController],
   providers: [AppService],

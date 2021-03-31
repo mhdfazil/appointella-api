@@ -42,6 +42,24 @@ export class EmailService {
         });
     }
     
+    public resetPassword(link: string, email: string): void {
+        this
+        .mailerService
+        .sendMail({
+            to: email,
+            from: 'appointella@gmail.com',
+            subject: 'Reset Password - Appointella',
+            template: 'reset-pwd',
+            context: { link },
+        })
+        .then((success) => {
+            console.log(success)
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+    }
+    
     public example2(): void {
         this
         .mailerService
