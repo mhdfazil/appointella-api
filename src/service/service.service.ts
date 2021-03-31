@@ -47,7 +47,7 @@ export class ServiceService implements OnModuleInit {
 
   async findToken(id: string, date: Date) {
     let token
-    const appointment = await this.appoitmentService.findByServiceLastToken(id, date);
+    token = await this.appoitmentService.findByServiceLastToken(id, date);
     const service = await this.serviceModel.findById(id).populate('merchant') as any;
 
     if(service.type != 'number')
@@ -57,11 +57,12 @@ export class ServiceService implements OnModuleInit {
     const duration = service.duration;
     const startTime: Date = service.merchant.openTime;
 
-    if(appointment)
-      token = appointment.token
-    else
-      token = 0
-
+    // if(appointment)
+    //   token = appointment.token
+    // else
+    //   token = 0
+    console.log({token});
+    
     if(token >= maxCount)
       throw new BadRequestException('No booking available')
 

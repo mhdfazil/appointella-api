@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ServiceService } from '../service/service.service';
 import { AppointmentDto } from './appointment.dto';
 import { Appointment, AppointmentDocument } from './appointment.schema';
@@ -24,6 +24,7 @@ export class AppoitmentService implements OnModuleInit {
   async create(createAppoitmentDto: AppointmentDto) {
     const service = await this.serviceService.findOne(createAppoitmentDto.service.toString())
     const appointment = new this.appointmentModel(createAppoitmentDto);
+    appointment.date = new Date(appointment.date.setHours(0, 0, 0, 0))
 
     if(service && service.type === 'time') {
       if (createAppoitmentDto.startTime) {
@@ -89,7 +90,8 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByServiceLastToken(id: string, date: Date) {
-    return this.appointmentModel.findOne({ service: id, date}).sort('-created_at').exec();
+    date = new Date(date.setHours(0, 0, 0, 0))
+    return await this.appointmentModel.find({ service: id, date }).count()
   }
 
   async update(id: string, appoitmentDto: AppointmentDto) {
