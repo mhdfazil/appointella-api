@@ -50,9 +50,9 @@ export class ResetPasswordService {
     if(resetPassword.reset === 'created')
       await this.resetPasswordModel.findByIdAndUpdate(resetPassword.id, { reset: 'form-sent' })
 
-    const link = this.configService.get<string>('BASE_PATH') + `reset-password/reset`
-    const script = '/assets/views/reset-pwd-form.js'
-    return await { token, link, script };
+    const link = this.configService.get<string>('BASE_PATH') + 'reset-password/reset'
+    const image = this.configService.get<string>('BASE_PATH') + 'reset-password.svg'
+    return await { token, link, image };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {
@@ -72,7 +72,8 @@ export class ResetPasswordService {
 
     await this.resetPasswordModel.findByIdAndUpdate(resetPassword.id, { reset: 'done' })
 
-    return true
+    const image = this.configService.get<string>('BASE_PATH') + 'reset-password-success.png'
+    return { image, message: 'Successfully password reset.' }
   }
 
   generateCode() { 

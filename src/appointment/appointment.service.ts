@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ServiceService } from '../service/service.service';
 import { AppointmentDto } from './appointment.dto';
 import { Appointment, AppointmentDocument } from './appointment.schema';
@@ -24,7 +24,7 @@ export class AppoitmentService implements OnModuleInit {
   async create(createAppoitmentDto: AppointmentDto) {
     const service = await this.serviceService.findOne(createAppoitmentDto.service.toString())
     const appointment = new this.appointmentModel(createAppoitmentDto);
-    appointment.date = new Date(appointment.date.setHours(0, 0, 0, 0))
+    appointment.date = this.getDateOnly(appointment.date)
 
     if(service && service.type === 'time') {
       if (createAppoitmentDto.startTime) {
@@ -90,7 +90,7 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByServiceLastToken(id: string, date: Date) {
-    date = new Date(date.setHours(0, 0, 0, 0))
+    // date = this.getDateOnly(date)
     return await this.appointmentModel.find({ service: id, date }).count()
   }
 
@@ -103,4 +103,20 @@ export class AppoitmentService implements OnModuleInit {
   async remove(id: string) {
     return await this.appointmentModel.findByIdAndRemove(id);
   }
+
+  getDateOnly(date: Date) {
+    console.log({date});
+    
+    date = new Date(date)
+    console.log({date});
+
+    date = new Date(date.setHours(0, 0, 0, 0))
+    console.log({date});
+    
+    date = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    console.log({date});
+    
+    return date;
+  }
+
 }

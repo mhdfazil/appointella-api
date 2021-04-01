@@ -14,6 +14,7 @@ export class ResetPasswordController {
   }
   
   @Post('reset')
+  @Render('reset-pwd-result')
   resetPwd(@Body() resetPasswordDto: ResetPasswordDto) {
     return this.resetPasswordService.resetPassword(resetPasswordDto);
   }
