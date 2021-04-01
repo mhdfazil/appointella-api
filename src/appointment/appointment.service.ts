@@ -90,7 +90,8 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByServiceLastToken(id: string, date: Date) {
-    // date = this.getDateOnly(date)
+    date = new Date(date)
+    date = new Date(date.setHours(0, 0, 0, 0))
     return await this.appointmentModel.find({ service: id, date }).count()
   }
 

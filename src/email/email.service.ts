@@ -42,7 +42,7 @@ export class EmailService {
         });
     }
     
-    public resetPassword(link: string, email: string): void {
+    public resetPassword(link: string, email: string, image: string): void {
         this
         .mailerService
         .sendMail({
@@ -50,7 +50,7 @@ export class EmailService {
             from: 'appointella@gmail.com',
             subject: 'Reset Password - Appointella',
             template: 'reset-pwd',
-            context: { link },
+            context: { link, image },
         })
         .then((success) => {
             console.log(success)

@@ -38,7 +38,8 @@ export class ResetPasswordService {
     }
 
     const path = this.configService.get<string>('BASE_PATH') + `reset-password/${token}`
-    return await this.emailService.resetPassword(path, resetPasswordDto.email);
+    const image = this.configService.get<string>('BASE_PATH') + 'reset-password.svg'
+    return await this.emailService.resetPassword(path, resetPasswordDto.email, image);
   }
 
   async sendResetForm(token: string) {
