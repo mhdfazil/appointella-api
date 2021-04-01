@@ -63,6 +63,10 @@ export class AppoitmentService implements OnModuleInit {
     return await this.appointmentModel.find({ merchant: id }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
   }
 
+  async findByMerchantDate(id: string, date:Date){
+    return await this.appointmentModel.find({ merchant: id, date }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+
+  }
   
   async findByServiceCurrentDate(id: string) {
     const [month, date, year] = new Date().toLocaleDateString("en-US").split("/")  
