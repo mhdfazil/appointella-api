@@ -60,11 +60,13 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByMerchant(id: string) {
+    console.log("ID>>>>>>>>", id);
     return await this.appointmentModel.find({ merchant: id }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
   }
 
   async findByMerchantDate(id: string, date:Date){
-    return await this.appointmentModel.find({ merchant: id, date }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+    console.log("DATE>>>>>>>>", date);
+    return await this.appointmentModel.find({ merchant: id, date:date }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
 
   }
   
@@ -93,7 +95,7 @@ export class AppoitmentService implements OnModuleInit {
     return this.appointmentModel.find({ customer: id, date: date }).exec();
   }
 
-  async findByServiceLastToken(id: string, date: Date) {
+  async findByServiceLastToken(id: string, date: Date) {  
     date = new Date(date)
     date = new Date(date.setHours(0, 0, 0, 0))
     return await this.appointmentModel.find({ service: id, date }).count()

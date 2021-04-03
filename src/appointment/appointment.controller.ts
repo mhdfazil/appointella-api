@@ -30,24 +30,20 @@ export class AppoitmentController {
     return this.appoitmentService.findOne(id);
   }
 
-  @Get('customer/:id')
-  findByCustomer(@Param('id') id: string) {
-    return this.appoitmentService.findByCustomer(id);
-  }
-
-  @Get('merchant/:id')
-  findByMerchant(@Param('id') id: string) {
-    return this.appoitmentService.findByMerchant(id);
-  }
-
   @Get('merchant/:id')
   findByMerchantDate(@Param('id') id: string, @Query('date') date: Date) {
-    return this.appoitmentService.findByMerchantDate(id, date);
+    if(date)
+      return this.appoitmentService.findByMerchantDate(id, date);
+    
+    return this.appoitmentService.findByMerchant(id);
   }
 
   @Get('customer/:id')
   findByCustomerDate(@Param('id') id: string, @Query('date') date: Date) {
-    return this.appoitmentService.findByCustomerDate(id, date);
+    if(date)
+      return this.appoitmentService.findByCustomerDate(id, date);
+
+    return this.appoitmentService.findByCustomer(id); 
   }
 
   @Public()
