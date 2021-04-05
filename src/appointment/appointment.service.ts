@@ -60,14 +60,26 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByMerchant(id: string) {
-    console.log("ID>>>>>>>>", id);
-    return await this.appointmentModel.find({ merchant: id }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+    return await this.appointmentModel
+      .find({ merchant: id })
+      .populate('service')
+      .populate({path:'merchant', populate:{path: 'user'}})
+      .exec();
   }
 
   async findByMerchantDate(id: string, date:Date){
-    console.log("DATE>>>>>>>>", date);
-    return await this.appointmentModel.find({ merchant: id, date:date }).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+    return await this.appointmentModel
+      .find({ merchant: id, date:date })
+      .populate('service')
+      .populate({ path:'merchant', populate:{path: 'user'} })
+      .exec();
+  }
 
+  async findByMerchantAndDates(id: string, from: Date, to: Date){
+    return await this.appointmentModel
+      .find({ merchant: id, date: { $gte: from, $lte: to } })
+      .populate('service')
+      .exec();
   }
   
   async findByServiceCurrentDate(id: string) {
@@ -76,7 +88,11 @@ export class AppoitmentService implements OnModuleInit {
     const weekDate: Date = new Date(currentDate)
     weekDate.setDate(currentDate.getDate()+7)
     
-    return await this.appointmentModel.find({ service: id,  date: {$gte: currentDate, $lt: weekDate}}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec();
+    return await this.appointmentModel
+      .find({ service: id,  date: {$gte: currentDate, $lt: weekDate}})
+      .populate('service')
+      .populate({path:'merchant', populate:{path: 'user'}})
+      .exec();
   }
 
   async findByCustomerToken(user: any): Promise<any> {
@@ -88,7 +104,11 @@ export class AppoitmentService implements OnModuleInit {
     // }))
     // return nappointment
 
-    return await this.appointmentModel.find({customer: user.userId}).populate('service').populate({path:'merchant', populate:{path: 'user'}}).exec()
+    return await this.appointmentModel
+      .find({customer: user.userId})
+      .populate('service')
+      .populate({path:'merchant', populate:{path: 'user'}})
+      .exec()
   }
 
   async findByCustomerDate(id: string, date: Date) {
