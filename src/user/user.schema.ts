@@ -27,6 +27,9 @@ export class User {
     @Prop()
     image?: string;
 
+    @Prop()
+    fcmToken?: string;
+
     @Prop({ default: false, required: true })
     verified?: boolean;
 

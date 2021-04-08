@@ -7,5 +7,6 @@ export class UserDto{
     readonly addressLine2: string;
     readonly type: string;
     image?: string;
+    readonly fcmToken?: string;
     readonly deleted: boolean;
 }
