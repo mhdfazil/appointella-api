@@ -33,16 +33,16 @@ export class ServiceService implements OnModuleInit {
       const key = Object.keys(JSON.parse(filter))[0];
 
       return await this.serviceModel
-        .find()
+        .find({ deleted: false })
         .where(key, new RegExp(value, 'i'))
         .populate('merchant')
         .exec();
     }
-    return await this.serviceModel.find().populate('merchant').exec();
+    return await this.serviceModel.find({ deleted: false }).populate('merchant').exec();
   }
 
   async findOne(id: string) {
-    return this.serviceModel.findOne({ _id: id });
+    return this.serviceModel.findOne({ _id: id, deleted: false });
   }
 
   async findToken(id: string, date: Date) {
@@ -80,6 +80,6 @@ export class ServiceService implements OnModuleInit {
   }
 
   async remove(id: string) {
-    return await this.serviceModel.findByIdAndRemove(id);
+    return await this.serviceModel.findByIdAndUpdate(id, { deleted: true });
   }
 }
