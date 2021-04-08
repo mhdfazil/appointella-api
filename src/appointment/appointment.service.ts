@@ -76,8 +76,15 @@ export class AppoitmentService implements OnModuleInit {
   }
 
   async findByMerchantAndDates(id: string, from: Date, to: Date){
+    from = new Date(from)
+    from.setDate(from.getDate() - 1)
+
+    to = new Date(to)
+    to.setDate(to.getDate() + 1)
+    
+    
     return await this.appointmentModel
-      .find({ merchant: id, date: { $gte: from, $lte: to } })
+      .find({ merchant: id, date: { $gt: from, $lt: to } })
       .populate('service')
       .exec();
   }

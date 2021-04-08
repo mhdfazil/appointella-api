@@ -31,7 +31,7 @@ export class AppoitmentController {
   }
 
   @Get('merchant/:id')
-  findByMerchantDate(@Param('id') id: string, @Query('date') date: Date, @Query('date') from: Date, @Query('date') to: Date) {
+  findByMerchantDate(@Param('id') id: string, @Query('date') date: Date, @Query('from') from: Date, @Query('to') to: Date) {
     if(from && to)
       return this.appoitmentService.findByMerchantAndDates(id, from, to);
     if(date)
