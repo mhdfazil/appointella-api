@@ -33,8 +33,11 @@ export class Appointment {
     @Prop()
     token: number;
 
-    @Prop({ required: true, enum: ['pending', 'accepted', 'canceled', 'completed'] })
+    @Prop({ required: true, enum: ['pending', 'accepted', 'canceled', 'completed'], default: 'pending' })
     status: string;
+
+    @Prop()
+    transactionId?: string;
 }
 
 export const AppointmentSchema = SchemaFactory.createForClass(Appointment);

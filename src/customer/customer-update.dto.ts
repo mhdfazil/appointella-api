@@ -10,5 +10,6 @@ export class CustomerUpdateDto{
     readonly addressLine2: string;
     readonly type: string;
     readonly image: string;
+    readonly fcmToken?: string;
     readonly deleted: boolean;
 }

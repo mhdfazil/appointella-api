@@ -10,4 +10,5 @@ export class AppointmentDto {
     readonly price: number;
     readonly token: number;
     readonly status: string;
+    readonly transactionId?: string;
 }

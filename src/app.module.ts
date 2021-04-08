@@ -20,6 +20,9 @@ import { EmailModule } from './email/email.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
 import * as mongoose from 'mongoose';
 import * as multer from 'multer';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksService } from './tasks/tasks.service';
+import { TasksModule } from './tasks/tasks.module';
 
 mongoose.set('useCreateIndex', true);
 
@@ -68,7 +71,9 @@ mongoose.set('useCreateIndex', true);
     AuthModule, 
     VerifyEmailModule,
     EmailModule,
-    ResetPasswordModule
+    ResetPasswordModule,
+    ScheduleModule.forRoot(),
+    TasksModule
   ],
   controllers: [AppController],
   providers: [AppService],

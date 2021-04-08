@@ -28,9 +28,6 @@ export class AppoitmentService implements OnModuleInit {
 
     if(service && service.type === 'time') {
       if (createAppoitmentDto.startTime) {
-        const service = await this.serviceService.findOne(
-          appointment.service.toString(),
-        );
         appointment.endTime = new Date(
           appointment.startTime.getTime() + service.duration * 60000,
         );
@@ -38,9 +35,10 @@ export class AppoitmentService implements OnModuleInit {
       }
     }
     else if(service) {
-      const { token, time } = await this.serviceService.findToken(service.id, createAppoitmentDto.date)
+      const { token, time } = await this.serviceService.findToken(service.id, createAppoitmentDto.date);
       appointment.token = token
       appointment.startTime = time
+      appointment.endTime = new Date(time.getTime() + service.duration * 60000);
       return await appointment.save()
     }
     
@@ -57,6 +55,10 @@ export class AppoitmentService implements OnModuleInit {
 
   async findByCustomer(id: string) {
     return await this.appointmentModel.find({ customer: id }).populate('service').exec();
+  }
+
+  async findBy(filter: any) {
+    return await this.appointmentModel.find(filter).exec();
   }
 
   async findByMerchant(id: string) {
