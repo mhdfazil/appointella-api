@@ -30,7 +30,7 @@ export class UserService implements OnModuleInit {
     this.adminService = this.moduleRef.get(AdminService, { strict: false });
   }
 
-  async create(user: User): Promise<any> {
+  async create(user: UserDto): Promise<any> {
     const hash = await bcrypt.hash(user.password, parseInt(this.configService.get<string>('SALT_ROUND')));
     user.password = hash;
 
@@ -45,7 +45,7 @@ export class UserService implements OnModuleInit {
       }
       // save merchant
       if(user.type === 'merchant') {
-        this.merchantService.create({ user: savedUser._id })
+        this.merchantService.create({ user: savedUser._id, name: user.name, openTime: user.openTime, closeTime: user.closeTime, longitude: user.longitude, latitude: user.latitude })
       }
       // save merchant
       if(user.type === 'admin') {

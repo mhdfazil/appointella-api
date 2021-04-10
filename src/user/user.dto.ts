@@ -9,4 +9,11 @@ export class UserDto{
     image?: string;
     readonly fcmToken?: string;
     readonly deleted: boolean;
+
+    readonly name?: string;
+    readonly longitude?:string;
+    readonly latitude?:string;
+    readonly openTime?:Date;
+    readonly closeTime?:Date;
+
 }
